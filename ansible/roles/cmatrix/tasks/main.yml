@@ -1,0 +1,9 @@
+---
+- name: Update apt packages
+  apt:
+    update_cache: yes
+
+- name: Install cmatrix
+  package:
+    name: cmatrix
+    state: present
