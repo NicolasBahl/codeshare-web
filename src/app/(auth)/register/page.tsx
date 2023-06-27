@@ -1,12 +1,12 @@
 import React from "react";
-import RegisterForm from "@/app/(auth)/register/components/RegisterForm";
+import RegisterForm from "@/app/(auth)/components/RegisterForm";
 
 const Register = () => {
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-      <div>
-        <p className="text-center text-2xl font-bold">Create an account</p>
-        <p className="text-md text-gray-400">
+      <div className="text-center ">
+        <p className="text-2xl font-bold">Create an account</p>
+        <p className="mt-1 text-sm text-gray-400">
           Enter your details below to create your account
         </p>
       </div>
