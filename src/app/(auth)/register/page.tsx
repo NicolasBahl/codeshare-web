@@ -1,5 +1,6 @@
 import React from "react";
 import RegisterForm from "@/app/(auth)/components/RegisterForm";
+import Link from "next/link";
 
 const Register = () => {
   return (
@@ -14,9 +15,9 @@ const Register = () => {
       <div className="flex flex-col items-center">
         <p className="text-md text-gray-400">
           Already have an account?{" "}
-          <a href="/login" className="text-md text-blue-500 hover:underline">
+          <Link href="/login" className="text-md text-blue-500 hover:underline">
             Sign in
-          </a>
+          </Link>
         </p>
       </div>
     </div>

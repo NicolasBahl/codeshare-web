@@ -7,6 +7,8 @@ import React, {
   PropsWithChildren,
 } from "react";
 import { hasCookie } from "@/actions/checkCookie";
+import ApiService from "@/utils/ApiService";
+import { LoginState } from "@/types/auth";
 
 interface UserData {
   id: string;
@@ -16,7 +18,7 @@ interface UserData {
 
 interface AuthContextType {
   user: UserData | null;
-  login: (userData: UserData) => void;
+  login: (state: LoginState) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -48,17 +50,18 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = (userData: UserData) => {
-    setUser(userData);
+  const login = async ({ email, password }: LoginState) => {
+    const res = await ApiService.login(email, password);
+    if (res && res.status === 200) {
+      setIsAuthenticated(true);
+      return res.data;
+    }
+    return null;
   };
 
   const logout = () => {
-    setUser(null);
+    setIsAuthenticated(false);
   };
-
-  // const isAuthenticated = () => {
-  //   return user !== null;
-  // };
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>

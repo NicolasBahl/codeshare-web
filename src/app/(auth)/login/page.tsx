@@ -1,5 +1,6 @@
 import React from "react";
 import LoginForm from "../components/LoginForm";
+import Link from "next/link";
 
 const Login = () => {
   return (
@@ -14,9 +15,9 @@ const Login = () => {
       <div className="flex flex-col items-center">
         <p className="text-md text-gray-400">
           Don&apos;t have an account?{" "}
-          <a href="/register" className="text-md text-blue-500 hover:underline">
+          <Link href="/register" className="text-md text-blue-500 hover:underline">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
