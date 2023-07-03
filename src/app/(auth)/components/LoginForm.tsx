@@ -9,7 +9,7 @@ import { LoginState } from "@/types/auth";
 import BannerAlert from "@/components/bannerAlert";
 
 const LoginForm = () => {
-  const { login, error, isAuthenticated } = useAuth();
+  const { login, error, loading } = useAuth();
 
   const {
     register,
@@ -30,13 +30,17 @@ const LoginForm = () => {
             email: (value) => value.includes("@"),
           },
         })}
+        loading={loading}
       />
       <Input
         placeholder="Password"
         type="password"
         {...register("password", { required: true })}
+        loading={loading}
       />
-      <Button disabled={!isValid}>Sign in</Button>
+      <Button disabled={!isValid} loading={loading}>
+        Sign in
+      </Button>
     </form>
   );
 };
