@@ -2,7 +2,7 @@
 
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import { BiMessage } from "react-icons/bi";
-import "../css/post.css";
+import "@/styles/post.css";
 import ButtonWithIcon from "./Buttons/buttonWithIcon";
 import VotesContainer from "./votesContainer";
 import DividerPost from "./Dividers/dividerPost";

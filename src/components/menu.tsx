@@ -4,7 +4,7 @@ import {
   AiOutlineQuestion,
   AiOutlineMessage,
 } from "react-icons/ai";
-import "../css/post.css";
+import "@/styles/post.css";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import React from "react";

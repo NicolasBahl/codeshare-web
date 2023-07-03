@@ -2,7 +2,7 @@
 
 import { FiArrowUp } from 'react-icons/fi';
 import { RxAvatar } from 'react-icons/rx';
-import '../css/post.css';
+import '@/styles/post.css';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
