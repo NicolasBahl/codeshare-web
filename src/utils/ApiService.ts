@@ -1,12 +1,17 @@
 class ApiService {
   private API_URL = process.env.NEXT_PUBLIC_API_URL;
   private async fetcher(url: string, options: any) {
-    const res = await fetch(this.API_URL + url, options);
-    const data = await res.json();
-    return {
-      status: res.status,
-      data,
-    };
+    try {
+      const res = await fetch(this.API_URL + url, options);
+
+      const data = await res.json();
+      return {
+        status: res.status,
+        data,
+      };
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -19,6 +24,31 @@ class ApiService {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
+      credentials: "include",
+    });
+  }
+
+  async register(email: string, password: string, username: string) {
+    return this.fetcher("/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, username }),
+      credentials: "include",
+    });
+  }
+
+  async getCurrentUser() {
+    return this.fetcher("/users/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+  }
+
+  async logout() {
+    return this.fetcher("/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
   }

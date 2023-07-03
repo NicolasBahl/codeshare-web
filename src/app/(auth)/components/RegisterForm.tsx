@@ -10,11 +10,16 @@ import {
   FieldErrors,
   UseFormGetValues,
 } from "react-hook-form";
+import ApiService from "@/utils/ApiService";
+import {useRouter} from "next/navigation";
+import BannerAlert from "@/components/bannerAlert";
 
 const RegisterForm = () => {
   const LAST_STEP = 2;
   const [loading, setLoading] = React.useState<boolean>(false);
   const [step, setStep] = React.useState<number>(0);
+  const [error, setError] = React.useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -24,17 +29,27 @@ const RegisterForm = () => {
   } = useForm<InitialState>({
     mode: "onSubmit",
   });
-
-  // TODO: Submit formData to API
-  const onSubmit: SubmitHandler<InitialState> = (formData) => {
+  const onSubmit: SubmitHandler<InitialState> = async (formData) => {
     if (step !== LAST_STEP) {
       setStep((prev) => prev + 1);
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    try {
+      const res = await ApiService.register(
+        formData.email,
+        formData.password,
+        formData.username
+      );
+      if (res && res.status === 200) {
+        router.push("/login");
+      } else {
+        setError(res?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Something went wrong");
+    }
   };
 
   const stepValidation: { [key: number]: () => boolean } = {
@@ -50,6 +65,7 @@ const RegisterForm = () => {
       className="mt-5 flex flex-col gap-3"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {error && <BannerAlert message={error} />}
       <RenderStep
         step={step}
         loading={loading}
@@ -144,11 +160,13 @@ const LastStep = ({ loading, register, errors, getValues }: StepProps) => {
               message: "Password must be at least 8 characters",
             },
           })}
+          type="password"
           error={errors.password?.message}
         />
         <Input
           placeholder="Confirm password"
           loading={loading}
+          type="password"
           {...register("confirmPassword", {
             required: "Confirm password is required",
             minLength: {

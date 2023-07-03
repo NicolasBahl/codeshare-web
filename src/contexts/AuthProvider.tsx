@@ -9,18 +9,16 @@ import React, {
 import { hasCookie } from "@/actions/checkCookie";
 import ApiService from "@/utils/ApiService";
 import { LoginState } from "@/types/auth";
-
-interface UserData {
-  id: string;
-  username: string;
-  email: string;
-}
+import { useRouter } from "next/navigation";
+import { UserData } from "@/types/user";
 
 interface AuthContextType {
   user: UserData | null;
-  login: (state: LoginState) => Promise<boolean>;
+  login: (state: LoginState) => Promise<UserData | null>;
   logout: () => void;
   isAuthenticated: boolean;
+  error: string | null;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,42 +27,64 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const checkAuth = async () => {
+    if (!(await hasCookie())) return;
+    setLoading(true);
+    try {
+      const res = await ApiService.getCurrentUser();
+      if (res && res.status === 200) {
+        setUser(res.data);
+      } else if (res && res.status === 401) {
+        setUser(null);
+      }
+    } catch (error) {
+      setError("An error occurred while logging in.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   React.useEffect(() => {
-    const checkAuth = async () => {
-      if (!(await hasCookie())) return;
-      try {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_API_URL + "/auth/check",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
-        if (data.isAuth) {
-          setIsAuthenticated(data.isAuth);
-        }
-      } catch (error) {}
-    };
     checkAuth();
   }, []);
 
   const login = async ({ email, password }: LoginState) => {
-    const res = await ApiService.login(email, password);
-    if (res && res.status === 200) {
-      setIsAuthenticated(true);
-      return res.data;
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await ApiService.login(email, password);
+      if (res && res.status === 200) {
+        setUser(res.data);
+        setIsAuthenticated(true);
+        await checkAuth();
+        router.push("/");
+        return res.data;
+      } else if (res && res.status === 401) {
+        setError("Invalid email or password.");
+        return null;
+      }
+    } catch (error) {
+      setError("An error occurred while logging in.");
+      return null;
+    } finally {
+      setLoading(false);
     }
-    return null;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await ApiService.logout();
+    router.push("/login");
     setIsAuthenticated(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, isAuthenticated, error, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
