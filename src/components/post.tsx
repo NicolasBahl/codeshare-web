@@ -23,7 +23,6 @@ const Post = (props: Post) => {
     title,
     content,
     author,
-    createdAt,
     onAuthorProfile,
     handleDownVote,
     handleUpVote,
@@ -54,7 +53,7 @@ const Post = (props: Post) => {
             <DividerPost />
             <Footer
               author={author}
-              createdAt={createdAt}
+             
               onAuthorProfile={onAuthorProfile}
             />
           </div>

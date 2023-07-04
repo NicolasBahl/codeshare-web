@@ -19,7 +19,7 @@ interface NavbarProps {
 const Navbar = (props: NavbarProps) => {
   const { onChange } = props;
   return (
-    <div className="flex justify-between items-center px-4 2x1:px-46 fixed w-full h-24 shadow-lg bg-transparent">
+    <div className="flex justify-between items-center px-4 2x1:px-46 w-full h-24 shadow-lg bg-white">
       <div className="flex-1 ml-10">
         <Image
           src={Logo}
@@ -30,7 +30,9 @@ const Navbar = (props: NavbarProps) => {
           priority
         />
       </div>
-      <SearchBar searchBarStyle="hidden sm:flex" onChange={onChange} />
+      <SearchBar searchBarStyle="hidden sm:flex mr-20 ml-10" onChange={onChange} />
+
+      
       <div className="flex">
         <FaBell className=".cursor-pointer" size={30} />
         {routes.map((route, index) => (

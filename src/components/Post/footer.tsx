@@ -4,12 +4,11 @@ import { BiMessage } from "react-icons/bi";
 
 interface FooterProps {
   author: string;
-  createdAt: Date;
   onAuthorProfile: () => void;
 }
 
 const Footer = (props: FooterProps) => {
-  const { author, createdAt, onAuthorProfile } = props;
+  const { author,  onAuthorProfile } = props;
   return (
     <div className="flex justify-between mt-4">
       <div className="flex items-center space-x-10">
@@ -19,7 +18,7 @@ const Footer = (props: FooterProps) => {
             {author}
           </span>
         </p>
-        <p className="text-gray-500 text-sm">{createdAt.toDateString()}</p>
+        {/* <p className="text-gray-500 text-sm">{createdAt.toDateString()}</p> */}
       </div>
       <ButtonWithIcon
         onClick={() => {

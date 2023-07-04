@@ -7,7 +7,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 
 
-export default function Menu() {
+export default function Top() {
 
   const topUsers = [
     { path:"/", icon: RxAvatar, text: 'Rajan N', likeCount: 15500 },
@@ -37,11 +37,11 @@ export default function Menu() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className=" bg-neutral-50 flex flex-col shadow-xl">
+    <div className="">
+      <div className=" bg-neutral-50 flex flex-col shadow-xl mr-24 mt-36 ">
         <div className="flex flex-col items-start relative bg-neutral-50">
           <div className="flex-col flex w-full">
-            <h1 className="p-4 font-bold text-gray-500">Top users</h1>
+            <h1 className="p-4 font-bold text-gray-500">Top Users</h1>
             {topUsers.map((item, index) => (
               <div  key={index} className="flex p-2 items-center gap-12 justify-between">
                 <div className="flex items-center">
