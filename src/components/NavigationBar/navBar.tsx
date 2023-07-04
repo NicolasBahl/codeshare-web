@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -5,6 +7,7 @@ import Logo from "../../../public/codeshare.png";
 import randomUser from "../../../public/random_user.png";
 import SearchBar from "./searchBar";
 import { FaBell } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const routes = [
   {
@@ -13,39 +16,43 @@ const routes = [
   },
 ];
 
-interface NavbarProps {
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-const Navbar = (props: NavbarProps) => {
-  const { onChange } = props;
+const Navbar = () => {
+  const router = useRouter();
   return (
-    <div className="flex justify-between items-center px-4 2x1:px-46 w-full h-24 shadow-lg bg-white">
-      <div className="flex-1 ml-10">
-        <Image
-          src={Logo}
-          alt="Logo"
-          width={150}
-          height={50}
-          className="cursor-pointer"
-          priority
+    <div className="flex h-24 w-full items-center bg-white px-4 shadow-lg">
+      <div className="container mx-auto flex items-center justify-between lg:max-w-screen-xl">
+        <div className="ml-10 flex-1 ">
+          <Image
+            src={Logo}
+            alt="Logo"
+            width={150}
+            height={50}
+            className="cursor-pointer"
+            priority
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        </div>
+        <SearchBar
+          searchBarStyle="hidden sm:flex mr-20 ml-10"
+          onChange={(e) => {}}
         />
-      </div>
-      <SearchBar searchBarStyle="hidden sm:flex mr-20 ml-10" onChange={onChange} />
 
-      
-      <div className="flex">
-        <FaBell className=".cursor-pointer" size={30} />
-        {routes.map((route, index) => (
-          <Link className="mx-4" href={route.path} key={index}>
-            {route.img && (
-              <Image
-                src={randomUser}
-                alt="Profil"
-                className="rounded-full h-8 w-8"
-              />
-            )}
-          </Link>
-        ))}
+        <div className="flex">
+          <FaBell className=".cursor-pointer" size={30} />
+          {routes.map((route, index) => (
+            <Link className="mx-4" href={route.path} key={index}>
+              {route.img && (
+                <Image
+                  src={randomUser}
+                  alt="Profil"
+                  className="h-8 w-8 rounded-full"
+                />
+              )}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

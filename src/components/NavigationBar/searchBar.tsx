@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 interface SearchBarProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchBarStyle?: string;
@@ -10,9 +12,9 @@ const SearchBar = (props: SearchBarProps) => {
   return (
     <div className={searchBarStyle}>
       <div className="relative mr-3 ">
-        <div className="absolute top-3 left-3 items-center">
+        <div className="absolute left-3 top-3 items-center">
           <svg
-            className="w-5 h-5 text-gray-500"
+            className="h-5 w-5 text-gray-500"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +28,7 @@ const SearchBar = (props: SearchBarProps) => {
         </div>
         <input
           type="text"
-          className="block p-2 pl-10 w-50  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:pl-3 "
+          className="w-50 block rounded-lg border  border-gray-300 bg-gray-50 p-2 pl-10 text-gray-900 "
           placeholder="Search Here..."
           onChange={onChange}
         />

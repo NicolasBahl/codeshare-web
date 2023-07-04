@@ -31,7 +31,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
 
   const checkAuth = async () => {
-    if (!(await hasCookie())) return;
+    if (!(await hasCookie())) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await ApiService.getCurrentUser();
