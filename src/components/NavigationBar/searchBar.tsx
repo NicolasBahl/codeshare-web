@@ -7,7 +7,7 @@ interface SearchBarProps {
   searchBarStyle?: string;
 }
 
-const SearchBar = (props: SearchBarProps) => {
+export const SearchBar = (props: SearchBarProps) => {
   const { onChange, searchBarStyle } = props;
   return (
     <div className={searchBarStyle}>
