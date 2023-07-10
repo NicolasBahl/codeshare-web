@@ -1,12 +1,12 @@
 "use client";
 
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
-import { BiMessage } from "react-icons/bi";
 import "@/styles/post.css";
 import ButtonWithIcon from "./Buttons/buttonWithIcon";
 import VotesContainer from "./votesContainer";
 import DividerPost from "./Dividers/dividerPost";
 import Footer from "./Post/footer";
+import CodePreview from "@/components/codePreview";
 
 interface Post {
   title: string;
@@ -18,19 +18,31 @@ interface Post {
   handleDownVote: () => void;
 }
 
-const Post = (props: Post) => {
-  const {
-    title,
-    content,
-    author,
-    onAuthorProfile,
-    handleDownVote,
-    handleUpVote,
-  } = props;
+const code = `// Déclaration d'une fonction pour calculer la somme de deux nombres
+function calculerSomme(a, b) {
+  var somme = a + b;
+  return somme;
+}
 
+// Appel de la fonction et affichage du résultat dans la console
+var nombre1 = 5;
+var nombre2 = 3;
+var resultat = calculerSomme(nombre1, nombre2);
+console.log("La somme de " + nombre1 + " et " + nombre2 + " est égale à : " + resultat);
+
+`;
+
+const Post = ({
+  title,
+  content,
+  author,
+  onAuthorProfile,
+  handleDownVote,
+  handleUpVote,
+}: Post) => {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-1/2 bg-neutral-50 rounded-xl flex p-2">
+    <>
+      <div className="flex h-1/2 rounded-xl bg-neutral-50 p-2">
         <div className="ml-5 mt-5 text-blue-800">
           <ButtonWithIcon
             onClick={handleUpVote}
@@ -44,22 +56,23 @@ const Post = (props: Post) => {
             iconStyle={"text-3xl"}
           />
         </div>
-        <div className="flex flex-col items-start ml-10 mt-5 relative">
+        <div className="relative ml-10 mt-5 flex flex-col items-start">
           <div className="ml-2">
-            <h1 className="font-bold text-lg text-black-500">{title}</h1>
-            <div className="text-neutral-500 text-sm mt-2 max-h-40 overflow-y-auto">
+            <h1 className="text-black-500 text-lg font-bold">{title}</h1>
+            <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
               <p>{content}</p>
+              {code && (
+                <div className="my-5">
+                  <CodePreview language="javascript" code={code} />
+                </div>
+              )}
             </div>
             <DividerPost />
-            <Footer
-              author={author}
-             
-              onAuthorProfile={onAuthorProfile}
-            />
+            <Footer author={author} onAuthorProfile={onAuthorProfile} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

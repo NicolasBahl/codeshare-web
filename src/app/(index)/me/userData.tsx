@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAuth } from "@/contexts/AuthProvider";
-import { Loader2 } from "lucide-react";
+import { LuLoader2 } from "react-icons/lu";
 import Button from "@/components/button";
 
 const UserData = () => {
@@ -10,7 +10,7 @@ const UserData = () => {
   if (loading)
     return (
       <div className={"flex h-screen justify-center"}>
-        <Loader2 className="animate-spin" size={48} />
+        <LuLoader2 className="animate-spin" size={48} />
       </div>
     );
   if (!user) return <div>User not authenticated</div>;

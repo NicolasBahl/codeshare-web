@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Loader2 } from "lucide-react";
+import { LuLoader2 } from "react-icons/lu";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = React.forwardRef<
       {...props}
       disabled={loading || props.disabled}
     >
-      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {loading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
       {props.children}
     </button>
   );
