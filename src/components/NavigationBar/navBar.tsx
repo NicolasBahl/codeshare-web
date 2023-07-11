@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { MenuOverlay } from "../menu";
 import { BookUp } from "lucide-react";
 import Button from "../button";
+import ProfileDropdown from "../profil";
 
 const routes = [
   {
@@ -61,20 +62,13 @@ const Navbar = () => {
         />
         {/* <Button className="burger-button" onClick={() => setIsOverlayMenuOpen(!isOverlayMenuOpen)}>open</Button> */}
 
-        <div className="flex">
-          <FaBell className=".cursor-pointer" size={30} />
-          {routes.map((route, index) => (
-            <Link className="mx-4" href={route.path} key={index}>
-              {route.img && (
-                <Image
-                  src={randomUser}
-                  alt="Profil"
-                  className="h-8 w-8 rounded-full"
-                />
-              )}
-            </Link>
-          ))}
+
+        <FaBell className=".cursor-pointer" size={30} />
+        <div className="p-4">
+          <ProfileDropdown />
         </div>
+
+
       </div>
    
     </div>
