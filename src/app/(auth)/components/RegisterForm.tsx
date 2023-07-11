@@ -11,16 +11,15 @@ import {
   UseFormGetValues,
 } from "react-hook-form";
 import ApiService from "@/utils/ApiService";
-import {useRouter} from "next/navigation";
 import BannerAlert from "@/components/bannerAlert";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const RegisterForm = () => {
-  const LAST_STEP = 2;
+  const FINAL_STEP = 2;
   const [loading, setLoading] = React.useState<boolean>(false);
   const [step, setStep] = React.useState<number>(0);
   const [error, setError] = React.useState<string | null>(null);
-  const router = useRouter();
-
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -30,7 +29,7 @@ const RegisterForm = () => {
     mode: "onSubmit",
   });
   const onSubmit: SubmitHandler<InitialState> = async (formData) => {
-    if (step !== LAST_STEP) {
+    if (step !== FINAL_STEP) {
       setStep((prev) => prev + 1);
       return;
     }
@@ -42,7 +41,7 @@ const RegisterForm = () => {
         formData.username
       );
       if (res && res.status === 200) {
-        router.push("/login");
+        await login({ email: formData.email, password: formData.password });
       } else {
         setError(res?.data?.message);
       }
@@ -74,7 +73,7 @@ const RegisterForm = () => {
         getValues={getValues}
       />
       <Button type="submit" loading={loading} disabled={!validateStep()}>
-        {step === LAST_STEP ? "Sign up" : "Continue"}
+        {step === FINAL_STEP ? "Sign up" : "Continue"}
       </Button>
     </form>
   );

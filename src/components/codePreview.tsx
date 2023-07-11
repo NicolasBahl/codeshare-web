@@ -25,7 +25,7 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
 
   return (
     <div
-      className="relative overflow-auto rounded bg-[#282c34] p-4"
+      className="relative overflow-auto rounded bg-[#282c34]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setTimeout(() => setIsHovered(false), 300)}
     >

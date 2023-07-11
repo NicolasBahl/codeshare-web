@@ -9,7 +9,7 @@ import React, {
 import { hasCookie } from "@/actions/checkCookie";
 import ApiService from "@/utils/ApiService";
 import { LoginState } from "@/types/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { UserData } from "@/types/user";
 
 interface AuthContextType {
@@ -21,15 +21,23 @@ interface AuthContextType {
   loading: boolean;
 }
 
+// Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Create provider component to encapsulate parts of your app where you want to share this context
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  // Use state hooks for user, authentication state, loading state and error state
   const [user, setUser] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
+  // Navigation related hooks
+  const router = useRouter();
+  const currentPage = usePathname();
+
+  // Perform an authentication check. If user has a cookie, try to get current user.
+  // If successful and user exists, set user. If unauthorized, set user to null.
   const checkAuth = async () => {
     if (!(await hasCookie())) {
       setLoading(false);
@@ -50,10 +58,18 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  // Clear error when navigating to a new page
+  React.useEffect(() => {
+    setError(null);
+  }, [currentPage]);
+
+  // Check authentication on mount
   React.useEffect(() => {
     checkAuth();
   }, []);
 
+  // For logging in a user. Makes a login request with email and password, then modifies
+  // state based on server's response. Navigates to home page if login is successful.
   const login = async ({ email, password }: LoginState) => {
     setError(null);
     setLoading(true);
@@ -77,6 +93,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
+  // To handle logging out. It makes a logout request and then updates state.
   const logout = async () => {
     await ApiService.logout();
     router.push("/login");
@@ -84,6 +101,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setUser(null);
   };
 
+  // Provide context values to children
   return (
     <AuthContext.Provider
       value={{ user, login, logout, isAuthenticated, error, loading }}
@@ -93,6 +111,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
+// Custom hook to use our Auth context. Will throw an error if not used within a component wrapped by `AuthProvider`.
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
