@@ -11,7 +11,7 @@ export const SearchBar = (props: SearchBarProps) => {
   const { onChange, searchBarStyle } = props;
   return (
     <div className={searchBarStyle}>
-      <div className="relative mr-3 ">
+      <div className="relative mr-3 w-full ">
         <div className="absolute left-3 top-3 items-center">
           <svg
             className="h-5 w-5 text-gray-500"
@@ -28,7 +28,7 @@ export const SearchBar = (props: SearchBarProps) => {
         </div>
         <input
           type="text"
-          className="w-50 block rounded-lg border  border-gray-300 bg-gray-50 p-2 pl-10 text-gray-900 "
+          className="block w-full rounded-lg bg-gray-100 p-2 pl-10 text-gray-900 "
           placeholder="Search Here..."
           onChange={onChange}
         />
