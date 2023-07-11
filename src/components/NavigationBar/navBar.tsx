@@ -9,6 +9,7 @@ import { LuBell } from "react-icons/lu";
 import { GrClose, GrMenu } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import { MenuOverlay } from "../menu";
+import ProfileDropdown from "../profil";
 
 const Navbar = () => {
   const [isOverlayMenuOpen, setIsOverlayMenuOpen] =
@@ -51,13 +52,9 @@ const Navbar = () => {
 
           <div className="flex items-center gap-5">
             <LuBell className="cursor-pointer text-gray-600" size={20} />
-            <div>
-              <Image
-                src={randomUser}
-                alt="Profil"
-                className="h-8 w-8 rounded-full"
-              />
-            </div>
+              <div className="p-4">
+                  <ProfileDropdown />
+              </div>
           </div>
         </div>
       </div>
