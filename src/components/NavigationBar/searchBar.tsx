@@ -3,7 +3,7 @@
 import React from "react";
 
 interface SearchBarProps {
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchBarStyle?: string;
 }
 
