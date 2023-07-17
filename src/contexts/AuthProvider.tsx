@@ -44,15 +44,18 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const currentPage = usePathname();
 
+  // Check if user is authenticated
+  const isAuthenticated = !!user;
+
   // Function to verify authentication token
-  const checkAuth = async () => {
-    if (!authToken) {
+  const checkAuth = async (token: string) => {
+    if (!token) {
       setLoading(false);
       return;
     }
     setLoading(true);
     try {
-      const res = await ApiService.getCurrentUser(authToken);
+      const res = await ApiService.getCurrentUser(token);
       if (res && res.status === 200) {
         setUser(res.data);
       } else if (res && res.status === 401) {
@@ -64,9 +67,6 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setLoading(false);
     }
   };
-
-  // Check if user is authenticated
-  const isAuthenticated = !!user;
 
   // When location changes, clear error and if authenticated user navigates to auth routes, redirect to home
   React.useEffect(() => {
@@ -80,7 +80,9 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   // Verify authentication when component mounts
   React.useEffect(() => {
-    checkAuth();
+    if (authToken) {
+      checkAuth(authToken);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -98,8 +100,8 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     try {
       const res = await ApiService.login(email, password);
       if (res && res.status === 200) {
+        await checkAuth(res.data.token);
         setAuthToken(res.data.token);
-        await checkAuth();
         router.push("/");
         return res.data;
       } else if (res && res.status === 401) {

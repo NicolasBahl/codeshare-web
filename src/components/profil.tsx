@@ -6,7 +6,7 @@ import cn from "@/utils/cn";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -23,12 +23,15 @@ const ProfileDropdown = () => {
     destructive?: boolean;
   }
 
-  const dropdownItems: DropdownItem[] = [
-    { label: "My profile", href: "/" },
-    { label: "Achievements", href: "/" },
-    { label: "Inbox", href: "/" },
-    { label: "Logout", onClick: logout, destructive: true },
-  ];
+  const dropdownItems: DropdownItem[] = isAuthenticated
+    ? [
+        { label: "Profile", href: "/me" },
+        { label: "Logout", onClick: logout, destructive: true },
+      ]
+    : [
+        { label: "Login", href: "/login" },
+        { label: "Register", href: "/register" },
+      ];
 
   return (
     <div className="relative">
