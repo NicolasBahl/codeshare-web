@@ -4,39 +4,36 @@ import {
   AiOutlineCompass,
   AiOutlineQuestion,
   AiOutlineMessage,
-  AiOutlineClose,
 } from "react-icons/ai";
 import Link from "next/link";
 import "@/styles/post.css";
-import clsx from "clsx";
-import SearchBar from "./NavigationBar/searchBar"
+import SearchBar from "./NavigationBar/searchBar";
+import cn from "@/utils/cn";
 
-  const menuItems = [
-    {
-      icon: <AiOutlineHome style={{ fontSize: "25px" }} />,
-      label: "Home",
-      link: "/",
-    },
-    {
-      icon: <AiOutlineCompass style={{ fontSize: "25px" }} />,
-      label: "Explore Topics",
-      link: "/",
-    },
-    {
-      icon: <AiOutlineQuestion style={{ fontSize: "25px" }} />,
-      label: "My Topics",
-      link: "/",
-    },
-    {
-      icon: <AiOutlineMessage style={{ fontSize: "25px" }} />,
-      label: "My Answers",
-      link: "/",
-    },
-  ];
+const menuItems = [
+  {
+    icon: <AiOutlineHome style={{ fontSize: "25px" }} />,
+    label: "Home",
+    link: "/",
+  },
+  {
+    icon: <AiOutlineCompass style={{ fontSize: "25px" }} />,
+    label: "Explore Topics",
+    link: "/",
+  },
+  {
+    icon: <AiOutlineQuestion style={{ fontSize: "25px" }} />,
+    label: "My Topics",
+    link: "/",
+  },
+  {
+    icon: <AiOutlineMessage style={{ fontSize: "25px" }} />,
+    label: "My Answers",
+    link: "/",
+  },
+];
 
 export default function Menu() {
-
-
   return (
     <div className="flex">
       <div className="flex w-56 flex-col items-start text-gray-500">
@@ -60,35 +57,32 @@ export default function Menu() {
   );
 }
 
-export function MenuOverlay({isOpen} : MenuOverlayProps) {
-
-
+export function MenuOverlay({ isOpen }: MenuOverlayProps) {
   return (
-    
-    <div className={clsx("flex w-full h-screen absolute bg-white z-20 duration-500 top-0 left-0 pt-28 lg:hidden", isOpen ? 'translate-y-0' : '-translate-y-full')}>
-    <div className="flex w-80 flex-col">
-      <div className="mx-4 my-2">
-      <SearchBar /> 
+    <div
+      className={cn(
+        "absolute left-0 top-0 z-20 flex h-screen w-full bg-white pt-28 duration-500 lg:hidden",
+        isOpen ? "translate-y-0" : "-translate-y-full"
+      )}
+    >
+      <div className="flex w-80 flex-col">
+        <div className="mx-4 my-2">
+          <SearchBar />
+        </div>
+        {menuItems.map((item, index) => (
+          <Link href={item.link} key={index}>
+            <div className="relative flex items-center p-5">
+              <p className="mx-4 my-2 text-3xl transition-colors duration-300 hover:text-neutral-500">
+                {item.label}
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
-      {menuItems.map((item, index) => (
-        <Link
-          href={item.link}
-          key={index}
-         
-        >
-          <div className="relative p-5 flex items-center">
-            <p className="mx-4 my-2 text-3xl hover:text-neutral-500 transition-colors duration-300">{item.label}</p>
-          </div>
-        </Link>
-      ))}
     </div>
-
-    </div>
-
   );
 }
 
 interface MenuOverlayProps {
   isOpen: boolean;
 }
-

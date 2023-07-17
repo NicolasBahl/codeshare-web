@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import clsx from "clsx";
+import cn from "@/utils/cn";
 
 const BannerAlert: React.FC<BannerAlertProps> = ({
   message,
@@ -10,7 +10,7 @@ const BannerAlert: React.FC<BannerAlertProps> = ({
 }) => {
   return (
     <div
-      className={clsx(
+      className={cn(
         "relative flex rounded-md border p-4",
         type === "error" && "border-red-500 text-red-500",
         type === "info" && "border-blue-500 text-blue-500",
