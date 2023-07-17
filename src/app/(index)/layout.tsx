@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "@/components/NavigationBar/navBar";
 import Menu from "@/components/menu";
 
-export default function TestLayout({
+export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;

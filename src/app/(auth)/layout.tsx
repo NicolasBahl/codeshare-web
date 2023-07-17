@@ -1,19 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = React.use(getSession());
-
-  if (session.isAuth) {
-    return redirect("/me");
-  }
-
   return (
     <section>
       <div className="flex flex-row">
@@ -41,10 +33,4 @@ export default function AuthLayout({
       </div>
     </section>
   );
-}
-
-function getSession() {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/check", {
-    headers: { Cookie: cookies().toString() },
-  }).then((res) => res.json());
 }

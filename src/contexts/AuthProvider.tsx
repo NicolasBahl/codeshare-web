@@ -6,11 +6,12 @@ import React, {
   useContext,
   PropsWithChildren,
 } from "react";
-import { hasCookie } from "@/actions/checkCookie";
 import ApiService from "@/utils/ApiService";
 import { LoginState } from "@/types/auth";
 import { useRouter, usePathname } from "next/navigation";
 import { UserData } from "@/types/user";
+import { useLocalStorage } from "usehooks-ts";
+import { LuLoader2 } from "react-icons/lu";
 
 interface AuthContextType {
   user: UserData | null;
@@ -21,35 +22,41 @@ interface AuthContextType {
   loading: boolean;
 }
 
+const AUTH_ROUTES = ["/login", "/register"];
+
 // Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Create provider component to encapsulate parts of your app where you want to share this context
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  // Use state hooks for user, authentication state, loading state and error state
-  const [user, setUser] = useState<UserData | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  // Loading state to manage API loading status
+  const [loading, setLoading] = useState<boolean>(false);
+  const [pageLoading, setPageLoading] = useState<boolean>(true);
+
+  // Error management states
   const [error, setError] = useState<string | null>(null);
+
+  // User authentication token and user data state
+  const [authToken, setAuthToken] = useLocalStorage("access_token", null);
+  const [user, setUser] = useState<UserData | null>(null);
 
   // Navigation related hooks
   const router = useRouter();
   const currentPage = usePathname();
 
-  // Perform an authentication check. If user has a cookie, try to get current user.
-  // If successful and user exists, set user. If unauthorized, set user to null.
+  // Function to verify authentication token
   const checkAuth = async () => {
-    if (!(await hasCookie())) {
+    if (!authToken) {
       setLoading(false);
       return;
     }
     setLoading(true);
     try {
-      const res = await ApiService.getCurrentUser();
+      const res = await ApiService.getCurrentUser(authToken);
       if (res && res.status === 200) {
         setUser(res.data);
       } else if (res && res.status === 401) {
-        setUser(null);
+        setAuthToken(null);
       }
     } catch (error) {
       setError("An error occurred while logging in.");
@@ -58,26 +65,40 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
-  // Clear error when navigating to a new page
+  // Check if user is authenticated
+  const isAuthenticated = !!user;
+
+  // When location changes, clear error and if authenticated user navigates to auth routes, redirect to home
   React.useEffect(() => {
     setError(null);
-  }, [currentPage]);
+    if (user && AUTH_ROUTES.includes(currentPage)) {
+      router.push("/");
+    }
+    setTimeout(() => setPageLoading(false), 500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, user]);
 
-  // Check authentication on mount
+  // Verify authentication when component mounts
   React.useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // For logging in a user. Makes a login request with email and password, then modifies
-  // state based on server's response. Navigates to home page if login is successful.
+  // If authentication token disappears, clear user data
+  React.useEffect(() => {
+    if (!authToken) {
+      setUser(null);
+    }
+  }, [authToken]);
+
+  // Login function
   const login = async ({ email, password }: LoginState) => {
     setError(null);
     setLoading(true);
     try {
       const res = await ApiService.login(email, password);
       if (res && res.status === 200) {
-        setUser(res.data);
-        setIsAuthenticated(true);
+        setAuthToken(res.data.token);
         await checkAuth();
         router.push("/");
         return res.data;
@@ -93,15 +114,22 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   };
 
-  // To handle logging out. It makes a logout request and then updates state.
+  // Logout function
   const logout = async () => {
     await ApiService.logout();
     router.push("/login");
-    setIsAuthenticated(false);
-    setUser(null);
+    setAuthToken(null);
   };
 
-  // Provide context values to children
+  if (pageLoading) {
+    return (
+      <div className={"flex h-screen items-center justify-center"}>
+        <LuLoader2 className="animate-spin" size={48} />
+      </div>
+    );
+  }
+
+  // Exposing context to children
   return (
     <AuthContext.Provider
       value={{ user, login, logout, isAuthenticated, error, loading }}
@@ -111,7 +139,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-// Custom hook to use our Auth context. Will throw an error if not used within a component wrapped by `AuthProvider`.
+/// Hook to expose Auth context
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {

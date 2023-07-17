@@ -8,7 +8,8 @@ export default function Home() {
         {Array(3)
           .fill(0)
           .map((_, i) => (
-            <div className="flex items-center space-x-4 my-5 p-5 bg-neutral-50 rounded-xl">
+            // eslint-disable-next-line react/jsx-key
+            <div className="my-5 flex items-center space-x-4 rounded-xl bg-neutral-50 p-5">
               <Skeleton className="h-12 w-12 rounded-full" />
               <div className="space-y-2">
                 <Skeleton className="h-4 w-[250px]" />
