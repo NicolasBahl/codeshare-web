@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthProvider";
 import cn from "@/utils/cn";
+import LetterPicture from "@/components/LetterPicture";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, user } = useAuth();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -39,13 +40,17 @@ const ProfileDropdown = () => {
         className="flex items-center focus:outline-none"
         onClick={toggleDropdown}
       >
-        <Image
-          src="/random_user.png"
-          alt="Profil"
-          width={30}
-          height={30}
-          className="h-8 w-8 cursor-pointer rounded-full"
-        />
+        {isAuthenticated ? (
+          <LetterPicture username={user?.username || ""} />
+        ) : (
+          <Image
+            src="/random_user.png"
+            alt="Profil"
+            width={30}
+            height={30}
+            className="h-8 w-8 cursor-pointer rounded-full"
+          />
+        )}
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-4 w-48 translate-x-1/2 transform rounded-md bg-neutral-50 py-2 shadow-lg">
