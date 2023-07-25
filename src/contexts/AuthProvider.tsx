@@ -118,7 +118,6 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   // Logout function
   const logout = async () => {
-    await ApiService.logout();
     router.push("/login");
     setAuthToken(null);
   };

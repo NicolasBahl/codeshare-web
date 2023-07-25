@@ -13,33 +13,22 @@ interface Post {
   content: string;
   author: string;
   createdAt: Date;
-  onAuthorProfile: () => void;
-  handleUpVote: () => void;
-  handleDownVote: () => void;
+  code?: string;
 }
 
-const code = `// Déclaration d'une fonction pour calculer la somme de deux nombres
-function calculerSomme(a, b) {
-  var somme = a + b;
-  return somme;
-}
+const Post = ({ title, content, author, code }: Post) => {
+  const onAuthorProfile = () => {
+    throw new Error("Function not implemented.");
+  };
 
-// Appel de la fonction et affichage du résultat dans la console
-var nombre1 = 5;
-var nombre2 = 3;
-var resultat = calculerSomme(nombre1, nombre2);
-console.log("La somme de " + nombre1 + " et " + nombre2 + " est égale à : " + resultat);
+  const handleUpVote = () => {
+    throw new Error("Function not implemented.");
+  };
 
-`;
+  const handleDownVote = () => {
+    throw new Error("Function not implemented.");
+  };
 
-const Post = ({
-  title,
-  content,
-  author,
-  onAuthorProfile,
-  handleDownVote,
-  handleUpVote,
-}: Post) => {
   return (
     <>
       <div className="flex h-1/2 rounded-xl bg-neutral-50 p-2">

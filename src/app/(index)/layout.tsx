@@ -8,11 +8,11 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col ">
+    <section>
       <Navbar />
-      <div className="container mx-auto px-4 pt-8 lg:max-w-screen-xl">
+      <div className="container mx-auto px-0 lg:px-10 lg:pt-8 lg:max-w-screen-xxl">
         <div className="flex">
-          <div className="hidden lg:block">
+          <div className="hidden lg:block px-5">
             <Menu />
           </div>
           <div className="flex-grow">{children}</div>

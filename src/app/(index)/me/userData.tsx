@@ -3,7 +3,7 @@
 import React from "react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { LuLoader2 } from "react-icons/lu";
-import Button from "@/components/button";
+import Button from "@/components/ui/button";
 
 const UserData = () => {
   const { user, loading, logout } = useAuth();

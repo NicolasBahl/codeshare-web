@@ -1,10 +1,15 @@
 class ApiService {
-  private API_URL = process.env.NEXT_PUBLIC_API_URL;
+  private readonly API_URL = process.env.NEXT_PUBLIC_API_URL;
+  private readonly DEFAULT_HEADERS = { "Content-Type": "application/json" };
+
   private async fetcher(url: string, options: any) {
     try {
-      const res = await fetch(this.API_URL + url, options);
-
+      const res = await fetch(`${this.API_URL}${url}`, {
+        headers: this.DEFAULT_HEADERS,
+        ...options,
+      });
       const data = await res.json();
+
       return {
         status: res.status,
         data,
@@ -14,46 +19,33 @@ class ApiService {
     }
   }
 
-  /**
-   * Login a user
-   * @param {string} email - The user's email
-   * @param {string} password - The user's password
-   */
-  async login(email: string, password: string) {
+  login(email: string, password: string) {
     return this.fetcher("/auth/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include",
     });
   }
 
-  async register(email: string, password: string, username: string) {
+  register(email: string, password: string, username: string) {
     return this.fetcher("/auth/register", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, username }),
-      credentials: "include",
     });
   }
 
-  async getCurrentUser(token: string) {
+  getCurrentUser(token: string) {
     return this.fetcher("/users/me", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      credentials: "include",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
     });
   }
 
-  async logout() {
-    return this.fetcher("/auth/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+  getPostById(id: string) {
+    return this.fetcher(`/posts/${id}`, { method: "GET" });
+  }
+
+  getStacks() {
+    return this.fetcher("/stacks", { method: "GET" });
   }
 }
 

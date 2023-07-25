@@ -17,7 +17,7 @@ const Navbar = () => {
   const router = useRouter();
   return (
     <>
-      <div className="z-50 flex h-24 w-full items-center bg-white px-10 shadow-lg">
+      <div className="relative z-50 flex h-24 w-full items-center bg-white px-10 shadow-lg">
         <div className="container mx-auto flex items-center justify-between lg:max-w-screen-xl">
           <>
             {isOverlayMenuOpen ? (
@@ -52,9 +52,9 @@ const Navbar = () => {
 
           <div className="flex items-center gap-5">
             <LuBell className="cursor-pointer text-gray-600" size={20} />
-              <div className="p-4">
-                  <ProfileDropdown />
-              </div>
+            <div className="p-4">
+              <ProfileDropdown />
+            </div>
           </div>
         </div>
       </div>
