@@ -5,20 +5,32 @@ import { useAuth } from "@/contexts/AuthProvider";
 import { BsCamera } from "react-icons/bs";
 import Skeleton from "@/components/ui/skeleton";
 import { FcCloseUpMode } from "react-icons/fc";
+import { UserData } from "@/types/user";
+import ApiService from "@/utils/ApiService";
 
-const ProfilePage = () => {
-  const { user } = useAuth();
+const ProfilePage = ({ params }: { params: { username: string } }) => {
+  const { user: me } = useAuth();
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [user, setUser] = useState<UserData>();
 
+  React.useEffect(() => {
+    const getUser = async () => {
+      const res = await ApiService.getUserByUsername(params.username);
+      if (res.status !== 200) return;
+      setUser(res.data);
+    };
+    getUser();
+  }, [params.username]);
 
+  const isMe = me?.username === params.username;
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    isMe && setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    isMe && setIsHovered(false);
   };
 
   const handleUploadPhoto = (event: any) => {
@@ -53,13 +65,15 @@ const ProfilePage = () => {
             >
               {isHovered && <BsCamera className="h-12 w-12" />}
             </label>
-            <input
-              id="photoInput"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleUploadPhoto}
-            />
+            {isMe && (
+              <input
+                id="photoInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleUploadPhoto}
+              />
+            )}
             <div className="absolute -right-1 bottom-2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-white">
               <FcCloseUpMode className="h-9 w-9" />
             </div>
@@ -68,7 +82,7 @@ const ProfilePage = () => {
         <div>
           <div className="mt-28 px-24 text-2xl">{user?.username}</div>
           <div className="mt-4 px-24 text-gray-500">
-            <span className="font-bold">250</span> points
+            <span className="font-bold">{user?.score}</span> points
           </div>
         </div>
       </div>

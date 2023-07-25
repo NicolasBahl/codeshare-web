@@ -2,7 +2,7 @@ class ApiService {
   private readonly API_URL = process.env.NEXT_PUBLIC_API_URL;
   private readonly DEFAULT_HEADERS = { "Content-Type": "application/json" };
 
-  private async fetcher(url: string, options: any) {
+  private async fetcher(url: string, options?: any) {
     try {
       const res = await fetch(`${this.API_URL}${url}`, {
         headers: this.DEFAULT_HEADERS,
@@ -38,6 +38,10 @@ class ApiService {
       method: "GET",
       headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
     });
+  }
+
+  getUserByUsername(username: string) {
+    return this.fetcher(`/users/${username}`);
   }
 
   getPostById(id: string) {

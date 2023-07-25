@@ -4,4 +4,6 @@ export interface UserData {
     email: string;
     avatar: string;
     isAdmin: boolean;
+    score?: number;
+    level?: string;
 }
