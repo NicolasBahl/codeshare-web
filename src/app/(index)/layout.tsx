@@ -8,7 +8,7 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col ">
       <Navbar />
       <div className="container mx-auto px-4 pt-8 lg:max-w-screen-xl">
         <div className="flex">

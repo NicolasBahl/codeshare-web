@@ -26,7 +26,7 @@ const ProfileDropdown = () => {
 
   const dropdownItems: DropdownItem[] = isAuthenticated
     ? [
-        { label: "Profile", href: "/me" },
+        { label: "Profile", href: "/profile" },
         { label: "Logout", onClick: logout, destructive: true },
       ]
     : [
