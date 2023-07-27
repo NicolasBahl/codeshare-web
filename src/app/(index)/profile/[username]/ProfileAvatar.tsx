@@ -34,24 +34,37 @@ const ProfileAvatar = ({ user }: { user: UserData }) => {
     <div className="relative rounded-lg">
       <div className="h-52 w-full bg-gradient-to-b from-violet-500 to-cyan-600 lg:rounded-t-lg"></div>
       <div className="absolute -bottom-24 left-20 flex h-44 w-44 items-center justify-center rounded-full border-8 border-white bg-gray-300">
-        <LetterPicture
-          username={user?.username || ""}
-          className="absolute"
-          width={200}
-          height={200}
-          fontSize={80}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        />
+        {profilePhoto ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profilePhoto}
+            className="rounded-full"
+            alt={user?.username}
+          />
+        ) : (
+          <LetterPicture
+            username={user?.username || ""}
+            width={200}
+            height={200}
+            fontSize={80}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        )}
         <label
           htmlFor="photoInput"
-          className="flex h-24 w-24 items-center justify-center text-white"
+          className="absolute flex h-full w-full items-center justify-center overflow-hidden rounded-full text-white"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {isHovered && <BsCamera className="h-12 w-12" />}
+          {isHovered && (
+            <div className="flex h-full w-full cursor-pointer items-center justify-center">
+              <BsCamera className="z-20 h-12 w-12" />
+              <div className="absolute h-full w-full bg-black opacity-50"></div>
+            </div>
+          )}
         </label>
         {isMe && (
           <input
