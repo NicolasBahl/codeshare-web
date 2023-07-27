@@ -20,6 +20,7 @@
     "eslint-config-next": "13.4.4",
     "framer-motion": "^10.12.18",
     "next": "^13.4.10",
+    "node-emoji": "^2.1.0",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",

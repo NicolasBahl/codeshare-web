@@ -7,6 +7,7 @@ import Skeleton from "@/components/ui/skeleton";
 import { FcCloseUpMode } from "react-icons/fc";
 import { UserData } from "@/types/user";
 import ApiService from "@/utils/ApiService";
+import * as emoji from 'node-emoji'
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
   const { user: me } = useAuth();
@@ -74,8 +75,10 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
                 onChange={handleUploadPhoto}
               />
             )}
-            <div className="absolute -right-1 bottom-2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-white">
-              <FcCloseUpMode className="h-9 w-9" />
+            <div >
+              <div className="absolute -right-1 bottom-2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-white">
+              {user && emoji.get(user?.level as string)}
+              </div>
             </div>
           </div>
         </div>
