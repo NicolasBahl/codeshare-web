@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { BsCamera } from "react-icons/bs";
 import Skeleton from "@/components/ui/skeleton";
-import { FcCloseUpMode } from "react-icons/fc";
 import { UserData } from "@/types/user";
 import ApiService from "@/utils/ApiService";
-import * as emoji from 'node-emoji'
+import * as emoji from "node-emoji";
+import LetterPicture from "@/components/LetterPicture";
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
   const { user: me } = useAuth();
@@ -50,14 +50,18 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
       <div className="w-full rounded-lg bg-white pb-8 shadow-md">
         <div className="relative rounded-lg">
           <div className="h-52 w-full bg-gradient-to-b from-violet-500 to-cyan-600 lg:rounded-t-lg"></div>
-          <div
-            className="absolute -bottom-24 left-20 flex h-44 w-44 items-center justify-center rounded-full border-8 border-white bg-gray-300"
-            style={{
-              backgroundImage: profilePhoto ? `url(${profilePhoto})` : "",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
+          <div className="absolute -bottom-24 left-20 flex h-44 w-44 items-center justify-center rounded-full border-8 border-white bg-gray-300">
+            <LetterPicture
+              username={user?.username || ""}
+              className="absolute"
+              width={200}
+              height={200}
+              fontSize={80}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
             <label
               htmlFor="photoInput"
               className="flex h-24 w-24 items-center justify-center text-white"
@@ -75,9 +79,9 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
                 onChange={handleUploadPhoto}
               />
             )}
-            <div >
+            <div>
               <div className="absolute -right-1 bottom-2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-white">
-              {user && emoji.get(user?.level as string)}
+                {user && emoji.get(user?.level as string)}
               </div>
             </div>
           </div>
