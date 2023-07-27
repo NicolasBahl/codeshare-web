@@ -4,9 +4,21 @@ import React, { useEffect, useRef } from "react";
 
 interface LetterPictureProps {
   username: string;
+  style?: React.CSSProperties;
+  className?: string;
+  width?: number;
+  height?: number;
+  fontSize?: number;
 }
 
-const LetterPicture: React.FC<LetterPictureProps> = ({ username }) => {
+const LetterPicture: React.FC<LetterPictureProps> = ({
+  username,
+  style,
+  className,
+  width,
+  height,
+  fontSize,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -28,7 +40,7 @@ const LetterPicture: React.FC<LetterPictureProps> = ({ username }) => {
         context.fillRect(0, 0, canvasWidth, canvasHeight);
 
         // Set text properties
-        context.font = "40px Helvetica";
+        context.font = `${fontSize || 40}px Arial`;
         context.fillStyle = "white";
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -44,12 +56,14 @@ const LetterPicture: React.FC<LetterPictureProps> = ({ username }) => {
   return (
     <canvas
       ref={canvasRef}
-      width={100}
-      height={100}
+      width={width || 100}
+      height={height || 100}
+      className={className}
       style={{
         borderRadius: "50%",
         width: "50px",
         height: "50px",
+        ...style,
       }}
     />
   );
