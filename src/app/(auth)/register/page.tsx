@@ -6,7 +6,7 @@ const Register = () => {
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="text-center ">
-        <p className="text-2xl font-bold">Create an account</p>
+        <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="mt-1 text-sm text-gray-400">
           Enter your details below to create your account
         </p>

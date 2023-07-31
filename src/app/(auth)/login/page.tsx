@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="text-center ">
-        <p className="text-2xl font-bold">Sign in to your account</p>
+        <h1 className="text-2xl font-bold">Sign in to your account</h1>
         <p className="mt-1 text-sm text-gray-400">
           Enter your details below to access your account
         </p>

@@ -42,9 +42,9 @@ export default function Menu() {
           <Link
             href={item.link}
             key={index}
-            className="my-2 hover:bg-blue-100 hover:text-blue-800"
+            className="my-2 hover:bg-blue-100 hover:text-primary"
           >
-            <div className="relative ml-5 flex items-center hover:before:absolute hover:before:-left-5 hover:before:h-full hover:before:w-3 hover:before:bg-blue-700 hover:before:content-[''] focus:bg-blue-200">
+            <div className="relative ml-5 flex items-center hover:before:absolute hover:before:-left-5 hover:before:h-full hover:before:w-3 hover:before:bg-primary hover:before:content-[''] focus:bg-primary">
               {item.icon}
               <p className="mx-4 my-2">{item.label}</p>
             </div>

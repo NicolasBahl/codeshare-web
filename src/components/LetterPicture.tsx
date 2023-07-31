@@ -36,7 +36,7 @@ const LetterPicture: React.FC<LetterPictureProps> = ({
         context.clearRect(0, 0, canvasWidth, canvasHeight);
 
         // Set background color
-        context.fillStyle = "#3a95cb";
+        context.fillStyle = "#1c73a3";
         context.fillRect(0, 0, canvasWidth, canvasHeight);
 
         // Set text properties
