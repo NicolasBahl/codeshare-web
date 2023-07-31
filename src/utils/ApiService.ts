@@ -51,6 +51,10 @@ class ApiService {
   getStacks() {
     return this.fetcher("/stacks", { method: "GET" });
   }
+
+  getTopUsers() {
+    return this.fetcher("/users/top", { method: "GET" });
+  }
 }
 
 const apiService = new ApiService();

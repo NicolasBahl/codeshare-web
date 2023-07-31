@@ -5,24 +5,18 @@ import { RxAvatar } from "react-icons/rx";
 import "@/styles/post.css";
 import Link from "next/link";
 import React, { useState } from "react";
+import ApiService from "@/utils/ApiService";
+import * as emoji from "node-emoji";
+import { useAuth } from "@/contexts/AuthProvider";
 
-const topUsers = [
-  { path: "/", icon: RxAvatar, text: "Rajan N", likeCount: 15500 },
-  { path: "/", icon: RxAvatar, text: "Siris M", likeCount: 12800 },
-  { path: "/", icon: RxAvatar, text: "Aakash D", likeCount: 2500 },
-  { path: "/", icon: RxAvatar, text: "Nischal K", likeCount: 2200 },
-  { path: "/", icon: RxAvatar, text: "Kishor K", likeCount: 1200 },
-];
+interface topProps {
+  username: string;
+  score: number;
+  level: string;
+}
 
-export default function Top() {
-  const [votes] = useState(15);
-
-  const [you] = useState({
-    path: "/",
-    icon: RxAvatar,
-    text: "You",
-    likeCount: votes,
-  });
+export default function Top({ topUsers }: { topUsers: topProps[] }) {
+  const { user: me } = useAuth();
 
   const formatVotes = (votes: number) => {
     const absoluteVotes = Math.abs(votes);
@@ -31,12 +25,12 @@ export default function Top() {
       const formattedVotes = (absoluteVotes / 1000).toFixed(1);
       return `${formattedVotes}k`;
     }
-    return votes.toString();
+    return votes;
   };
 
   return (
-    <div className="">
-      <div className="flex flex-col bg-white shadow-xl ">
+    <div>
+      <div className="flex flex-col rounded-lg bg-white shadow-md">
         <div className="relative flex flex-col items-start">
           <div className="flex w-full flex-col">
             <h1 className="p-4 font-bold text-gray-500">Top Users</h1>
@@ -46,40 +40,52 @@ export default function Top() {
                 className="flex items-center justify-between gap-12 p-2"
               >
                 <div className="flex items-center">
-                  <item.icon
+                  <RxAvatar
                     className="text-gray-500"
                     style={{ fontSize: "25px" }}
                   />
-                  <a href={item.path} className="p-4 text-blue-800">
-                    {item.text}
-                  </a>
+                  <Link
+                    href={`/profile/${item.username}`}
+                    className="p-4 text-blue-800"
+                  >
+                    {item.username}
+                  </Link>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-2 text-gray-500">
-                    {formatVotes(item.likeCount)}
+                    {formatVotes(item.score)}
                   </span>
-                  <FiArrowUp
-                    className="text-blue-800"
-                    style={{ fontSize: "30px" }}
-                  />
+                  {item && emoji.get(item.level as string)}
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="mx-10 my-2 mt-4 h-px bg-gray-500"></div>
-        <div className="flex items-center justify-between gap-12 p-2">
-          <div className="flex items-center">
-            <RxAvatar className="text-gray-500" style={{ fontSize: "25px" }} />
-            <Link href={you.path} className="p-4 text-blue-800">
-              {you.text}
-            </Link>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2 text-gray-500">{formatVotes(votes)}</span>
-            <FiArrowUp className="text-blue-800" style={{ fontSize: "30px" }} />
-          </div>
-        </div>
+        {me && (
+          <>
+            <div className="mx-10 my-2 mt-4 h-px bg-gray-500"></div>
+            <div className="flex items-center justify-between gap-12 p-2">
+              <div className="flex items-center">
+                <RxAvatar
+                  className="text-gray-500"
+                  style={{ fontSize: "25px" }}
+                />
+                <Link
+                  href={`/profile/${me?.username}`}
+                  className="p-4 text-blue-800"
+                >
+                  You
+                </Link>
+              </div>
+              <div className="flex items-center">
+                <span className="mr-2 text-gray-500">
+                  {formatVotes(me?.score as number)}
+                </span>
+                {emoji.get(me.level as string)}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
