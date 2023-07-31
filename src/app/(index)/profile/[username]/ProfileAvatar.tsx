@@ -38,7 +38,8 @@ const ProfileAvatar = ({ user }: { user: UserData }) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={profilePhoto}
-            className="rounded-full"
+            // fix image size to square
+            className="h-full w-full rounded-full object-cover"
             alt={user?.username}
           />
         ) : (
