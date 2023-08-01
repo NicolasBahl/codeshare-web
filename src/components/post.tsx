@@ -13,6 +13,7 @@ import apiService from "@/utils/ApiService";
 import { useAuth } from "@/contexts/AuthProvider";
 import React from "react";
 import cn from "@/utils/cn";
+import { useRouter } from "next/navigation";
 
 interface PostProps {
   post: Post;
@@ -22,12 +23,19 @@ interface PostProps {
 const Post = ({ post, compact = false }: PostProps) => {
   const { authToken } = useAuth();
   const [currentVote, setCurrentVote] = React.useState<number>(
-    post.currentVote || 0
+    post.user_current_vote || 0
   );
+  const router = useRouter();
+
+  // Update the current vote and score when the post refresh
+  React.useEffect(() => {
+    setCurrentVote(post.user_current_vote || 0);
+    setScore(post.score);
+  }, [post]);
 
   const [score, setScore] = React.useState<number>(post.score);
   const onAuthorProfile = () => {
-    throw new Error("Function not implemented.");
+    router.push(`/profile/${post.user.username}`);
   };
 
   const handleUpVote = async () => {
@@ -76,7 +84,6 @@ const Post = ({ post, compact = false }: PostProps) => {
           <div className="ml-2">
             {compact ? (
               <Link href={`/questions/${post.id}`}>
-                {" "}
                 <h1 className="text-black-500 text-lg font-bold">
                   {post.title}
                 </h1>

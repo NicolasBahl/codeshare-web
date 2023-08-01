@@ -14,7 +14,7 @@ const Footer = (props: FooterProps) => {
       <div className="flex items-center space-x-10">
         <p className="text-gray-500 text-sm pr-2">
           <span className="px-1">Posted by</span>
-          <span className="text-blue-800" onClick={onAuthorProfile}>
+          <span className="text-blue-800 cursor-pointer" onClick={onAuthorProfile}>
             {author}
           </span>
         </p>

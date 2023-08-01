@@ -13,5 +13,5 @@ export interface Post {
   comments: [];
   user: UserData;
   stack: { id: string; name: string };
-  currentVote?: number;
+  user_current_vote?: number;
 }
