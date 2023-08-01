@@ -51,6 +51,7 @@ const LetterPicture: React.FC<LetterPictureProps> = ({
     };
 
     drawInitials();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   return (

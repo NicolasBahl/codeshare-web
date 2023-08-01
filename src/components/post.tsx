@@ -7,16 +7,15 @@ import VotesContainer from "./votesContainer";
 import DividerPost from "./Dividers/dividerPost";
 import Footer from "./Post/footer";
 import CodePreview from "@/components/codePreview";
+import { Post } from "@/types/post";
+import Link from "next/link";
 
-interface Post {
-  title: string;
-  content: string;
-  author: string;
-  createdAt: Date;
-  code?: string;
+interface PostProps {
+  post: Post;
+  compact?: boolean;
 }
 
-const Post = ({ title, content, author, code }: Post) => {
+const Post = ({ post, compact = false }: PostProps) => {
   const onAuthorProfile = () => {
     throw new Error("Function not implemented.");
   };
@@ -38,7 +37,7 @@ const Post = ({ title, content, author, code }: Post) => {
             icon={FiArrowUp}
             iconStyle={"text-3xl"}
           />
-          <VotesContainer votes={100} />
+          <VotesContainer votes={post.score} />
           <ButtonWithIcon
             onClick={handleDownVote}
             icon={FiArrowDown}
@@ -47,17 +46,32 @@ const Post = ({ title, content, author, code }: Post) => {
         </div>
         <div className="relative ml-10 mt-5 flex flex-col items-start">
           <div className="ml-2">
-            <h1 className="text-black-500 text-lg font-bold">{title}</h1>
+            {compact ? (
+              <Link href={`/questions/${post.id}`}>
+                {" "}
+                <h1 className="text-black-500 text-lg font-bold">
+                  {post.title}
+                </h1>
+              </Link>
+            ) : (
+              <h1 className="text-black-500 text-lg font-bold">{post.title}</h1>
+            )}
             <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
-              <p>{content}</p>
-              {code && (
+              <p>{post.content}</p>
+              {post.code && !compact && (
                 <div className="my-5">
-                  <CodePreview language="javascript" code={code} />
+                  <CodePreview
+                    language={post.stack.name.toLowerCase() || ""}
+                    code={post.code}
+                  />
                 </div>
               )}
             </div>
             <DividerPost />
-            <Footer author={author} onAuthorProfile={onAuthorProfile} />
+            <Footer
+              author={post.user.username}
+              onAuthorProfile={onAuthorProfile}
+            />
           </div>
         </div>
       </div>

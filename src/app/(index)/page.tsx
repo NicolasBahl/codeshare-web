@@ -1,23 +1,21 @@
-import Skeleton from "@/components/ui/skeleton";
+import ApiService from "@/utils/ApiService";
+import Post from "@/components/post";
+import { Post as PostType } from "@/types/post";
 
-export default function Home() {
+export default async function Home() {
+  const { posts } = await getPosts();
   return (
     <>
       <main>
-        {/* for twice */}
-        {Array(3)
-          .fill(0)
-          .map((_, i) => (
-            // eslint-disable-next-line react/jsx-key
-            <div className="my-5 flex items-center space-x-4 rounded-xl bg-neutral-50 p-5">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-              </div>
-            </div>
-          ))}
+        {posts.map((post: PostType) => (
+          <Post post={post} key={post.id} compact={true} />
+        ))}
       </main>
     </>
   );
+}
+
+async function getPosts() {
+  const res = await ApiService.getPosts();
+  return res.data;
 }

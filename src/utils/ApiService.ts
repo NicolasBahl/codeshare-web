@@ -55,6 +55,10 @@ class ApiService {
   getTopUsers() {
     return this.fetcher("/users/top", { method: "GET" });
   }
+
+  getPosts() {
+    return this.fetcher("/posts", { method: "GET" });
+  }
 }
 
 const apiService = new ApiService();

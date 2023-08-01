@@ -7,16 +7,11 @@ export default async function PostPage({
 }: {
   params: { postId: string };
 }) {
-  const post = await getPost(params.postId);
+  const { post } = await getPost(params.postId);
 
   return (
     <div>
-      <Post
-        title={post.title}
-        content={post.content}
-        author={post.author}
-        createdAt={post.createdAt}
-      />
+      <Post post={post} />
     </div>
   );
 }
