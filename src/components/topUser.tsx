@@ -30,7 +30,7 @@ export default function TopUser({ topUsers }: { topUsers: topProps[] }) {
   return (
     <div className="rounded-lg bg-white p-5 shadow-md">
       <h1 className="mb-2 font-bold text-gray-500">Top Users</h1>
-      {topUsers.map((item, index) => (
+      {topUsers && topUsers.map((item, index) => (
         <div key={index} className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <LetterPicture

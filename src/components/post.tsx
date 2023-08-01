@@ -9,6 +9,10 @@ import Footer from "./Post/footer";
 import CodePreview from "@/components/codePreview";
 import { Post } from "@/types/post";
 import Link from "next/link";
+import apiService from "@/utils/ApiService";
+import { useAuth } from "@/contexts/AuthProvider";
+import React from "react";
+import cn from "@/utils/cn";
 
 interface PostProps {
   post: Post;
@@ -16,16 +20,40 @@ interface PostProps {
 }
 
 const Post = ({ post, compact = false }: PostProps) => {
+  const { authToken } = useAuth();
+  const [currentVote, setCurrentVote] = React.useState<number>(
+    post.currentVote || 0
+  );
+
+  const [score, setScore] = React.useState<number>(post.score);
   const onAuthorProfile = () => {
     throw new Error("Function not implemented.");
   };
 
-  const handleUpVote = () => {
-    throw new Error("Function not implemented.");
+  const handleUpVote = async () => {
+    if (!authToken) return;
+    if (currentVote == 1) {
+      const res = await apiService.votePost(post.id, 0, authToken);
+      setCurrentVote(0);
+      setScore(res.data.score);
+    } else {
+      const res = await apiService.votePost(post.id, 1, authToken);
+      setCurrentVote(1);
+      setScore(res.data.score);
+    }
   };
 
-  const handleDownVote = () => {
-    throw new Error("Function not implemented.");
+  const handleDownVote = async () => {
+    if (!authToken) return;
+    if (currentVote == -1) {
+      const res = await apiService.votePost(post.id, 0, authToken);
+      setCurrentVote(0);
+      setScore(res.data.score);
+    } else {
+      const res = await apiService.votePost(post.id, -1, authToken);
+      setCurrentVote(-1);
+      setScore(res.data.score);
+    }
   };
 
   return (
@@ -35,13 +63,13 @@ const Post = ({ post, compact = false }: PostProps) => {
           <ButtonWithIcon
             onClick={handleUpVote}
             icon={FiArrowUp}
-            iconStyle={"text-3xl"}
+            iconStyle={cn("text-3xl", currentVote === 1 && "text-red-500")}
           />
-          <VotesContainer votes={post.score} />
+          <VotesContainer votes={score} />
           <ButtonWithIcon
             onClick={handleDownVote}
             icon={FiArrowDown}
-            iconStyle={"text-3xl"}
+            iconStyle={cn("text-3xl", currentVote === -1 && "text-red-500")}
           />
         </div>
         <div className="relative ml-10 mt-5 flex flex-col items-start">

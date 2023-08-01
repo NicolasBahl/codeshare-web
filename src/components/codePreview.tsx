@@ -25,11 +25,11 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
 
   return (
     <div
-      className="relative overflow-auto rounded bg-[#282c34]"
+      className="relative overflow-auto rounded bg-[#282c34] max-w-4xl"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setTimeout(() => setIsHovered(false), 300)}
     >
-      <SyntaxHighlighter language={language} style={oneDark}>
+      <SyntaxHighlighter language={language} style={oneDark} >
         {code}
       </SyntaxHighlighter>
       <AnimatePresence>

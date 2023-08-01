@@ -42,13 +42,15 @@ class ApiService {
   }
 
   getUserByUsername(username: string) {
-    return this.fetcher(`/users/${username}`);
+    return this.fetcher(`/users/${username}`, {
+      next: { revalidate: 60 },
+    });
   }
 
   getPostById(id: string) {
     return this.fetcher(`/posts/${id}`, {
       method: "GET",
-      next: { revalidate: 60 },
+      next: { revalidate: 10 },
     });
   }
 
@@ -59,12 +61,20 @@ class ApiService {
   getTopUsers() {
     return this.fetcher("/users/top", {
       method: "GET",
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
   }
 
   getPosts() {
-    return this.fetcher("/posts", { method: "GET", next: { revalidate: 60 } });
+    return this.fetcher("/posts", { method: "GET", next: { revalidate: 10 } });
+  }
+
+  votePost(postId: string, value: -1 | 0 | 1, token: string) {
+    return this.fetcher(`/posts/${postId}/vote`, {
+      method: "POST",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ value }),
+    });
   }
 
   changePassword(
@@ -74,19 +84,21 @@ class ApiService {
     token: string | null
   ) {
     return this.fetcher(`/users/change_password/${id}`, {
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       method: "PUT",
       body: JSON.stringify({ oldPassword, newPassword }),
     });
   }
 
-  changeEmail(
-    id: string | undefined,
-    email: string,
-    token: string | null
-  ) {
+  changeEmail(id: string | undefined, email: string, token: string | null) {
     return this.fetcher(`/users/change_email/${id}`, {
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       method: "PUT",
       body: JSON.stringify({ email }),
     });
