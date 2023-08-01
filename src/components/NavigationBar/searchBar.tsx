@@ -64,7 +64,10 @@ export const SearchBar = (props: SearchBarProps) => {
   };
 
   const handleOnBlur = () => {
-    setOpen(false);
+    // timeout to prevent the search result from disappearing when clicking on the result
+    setTimeout(() => {
+      setOpen(false);
+    }, 200);
   };
 
   return (
