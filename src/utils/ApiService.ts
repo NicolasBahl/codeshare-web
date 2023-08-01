@@ -66,6 +66,31 @@ class ApiService {
   getPosts() {
     return this.fetcher("/posts", { method: "GET", next: { revalidate: 60 } });
   }
+
+  changePassword(
+    id: string | undefined,
+    oldPassword: string,
+    newPassword: string,
+    token: string | null
+  ) {
+    return this.fetcher(`/users/change_password/${id}`, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({ oldPassword, newPassword }),
+    });
+  }
+
+  changeEmail(
+    id: string | undefined,
+    email: string,
+    token: string | null
+  ) {
+    return this.fetcher(`/users/change_email/${id}`, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({ email }),
+    });
+  }
 }
 
 const apiService = new ApiService();

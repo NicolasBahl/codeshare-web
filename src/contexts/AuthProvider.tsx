@@ -20,6 +20,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   error: string | null;
   loading: boolean;
+  authToken: string | null;
 }
 
 const AUTH_ROUTES = ["/login", "/register"];
@@ -133,7 +134,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // Exposing context to children
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isAuthenticated, error, loading }}
+      value={{ user, login, logout, isAuthenticated, error, loading, authToken }}
     >
       {children}
     </AuthContext.Provider>
