@@ -91,6 +91,14 @@ class ApiService {
       body: JSON.stringify({ email }),
     });
   }
+
+  getResult(query : string) {
+    return this.fetcher("/search", {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    });
+  }
+
 }
 
 const apiService = new ApiService();
