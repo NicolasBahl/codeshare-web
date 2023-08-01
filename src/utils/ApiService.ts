@@ -37,6 +37,7 @@ class ApiService {
     return this.fetcher("/users/me", {
       method: "GET",
       headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
+      next: { revalidate: 60 },
     });
   }
 
@@ -45,7 +46,10 @@ class ApiService {
   }
 
   getPostById(id: string) {
-    return this.fetcher(`/posts/${id}`, { method: "GET" });
+    return this.fetcher(`/posts/${id}`, {
+      method: "GET",
+      next: { revalidate: 60 },
+    });
   }
 
   getStacks() {
@@ -53,11 +57,14 @@ class ApiService {
   }
 
   getTopUsers() {
-    return this.fetcher("/users/top", { method: "GET" });
+    return this.fetcher("/users/top", {
+      method: "GET",
+      next: { revalidate: 300 },
+    });
   }
 
   getPosts() {
-    return this.fetcher("/posts", { method: "GET" });
+    return this.fetcher("/posts", { method: "GET", next: { revalidate: 60 } });
   }
 }
 
