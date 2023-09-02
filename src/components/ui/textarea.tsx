@@ -10,12 +10,14 @@ interface TextareaProps
   error?: string;
   label?: string;
   minHeight?: string;
+  onTyping?: (value: string) => void
 }
 
 const TextArea: React.FC<TextareaProps> = ({
   loading,
   error,
   minHeight = "3rem",
+  onTyping,
   ...props
 }) => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -25,6 +27,7 @@ const TextArea: React.FC<TextareaProps> = ({
 
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = evt.target?.value;
+    onTyping && onTyping(val);
     setValue(val);
   };
 
@@ -39,6 +42,7 @@ const TextArea: React.FC<TextareaProps> = ({
         </label>
       )}
       <textarea
+          {...props}
         ref={textAreaRef}
         id={props.label?.toLowerCase() || undefined}
         disabled={loading}
@@ -46,7 +50,6 @@ const TextArea: React.FC<TextareaProps> = ({
         rows={1}
         style={{ resize: "none", minHeight }}
         value={value}
-        {...props}
         className={cn(
           "border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
           error && "border-red-500 ring-red-100",

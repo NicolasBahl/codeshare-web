@@ -104,13 +104,33 @@ class ApiService {
     });
   }
 
-  getResult(query : string) {
+  getResult(query: string) {
     return this.fetcher("/search", {
       method: "POST",
       body: JSON.stringify({ query }),
     });
   }
 
+  createPost(post: {
+    title: string;
+    stack: string;
+    content: string;
+    code: string;
+    token: string;
+  }) {
+    return this.fetcher("/posts", {
+      method: "POST",
+      headers: {
+        ...this.DEFAULT_HEADERS,
+        Authorization: `Bearer ${post.token}`,
+      },
+      body: JSON.stringify({
+        title: post.title,
+        stack: post.stack,
+        content: post.content,
+      }),
+    });
+  }
 }
 
 const apiService = new ApiService();

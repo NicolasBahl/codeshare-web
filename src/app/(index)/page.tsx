@@ -7,9 +7,12 @@ export default async function Home() {
   return (
     <>
       <main>
-        {posts && posts.map((post: PostType) => (
-          <Post post={post} key={post.id} compact={true} />
-        ))}
+        {posts &&
+          posts.map((post: PostType) => (
+            <div key={post.id} className="mb-5">
+              <Post post={post} compact={true} />
+            </div>
+          ))}
       </main>
     </>
   );
