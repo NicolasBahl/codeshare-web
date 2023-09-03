@@ -128,6 +128,7 @@ class ApiService {
         title: post.title,
         stack: post.stack,
         content: post.content,
+        code: post.code,
       }),
     });
   }

@@ -4,7 +4,6 @@ import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import "@/styles/post.css";
 import ButtonWithIcon from "./Buttons/buttonWithIcon";
 import DividerPost from "./Dividers/dividerPost";
-import Footer from "./Post/footer";
 import CodePreview from "@/components/codePreview";
 import { Post } from "@/types/post";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 import React from "react";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
+import { BiMessage } from "react-icons/bi";
 
 interface PostProps {
   post: Post;
@@ -119,6 +119,37 @@ const Post = ({ post, compact = false }: PostProps) => {
         </div>
       </div>
     </>
+  );
+};
+
+const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
+  const { author, onAuthorProfile } = props;
+  return (
+    <div className="mt-4 flex justify-between">
+      <div className="flex items-center space-x-10">
+        <p className="pr-2 text-sm text-gray-500">
+          <span className="px-1">Posted by</span>
+          <span
+            className="cursor-pointer text-blue-800"
+            onClick={onAuthorProfile}
+          >
+            {author}
+          </span>
+        </p>
+        {/* <p className="text-gray-500 text-sm">{createdAt.toDateString()}</p> */}
+      </div>
+      <ButtonWithIcon
+        onClick={() => {
+          console.log("commentaires cliqué");
+        }}
+        icon={BiMessage}
+        buttonStyle={
+          "text-gray-500 text-sm mr-2 flex justify-center items-center"
+        }
+        buttonContent={"20+"}
+        iconStyle={"text-base"}
+      />
+    </div>
   );
 };
 

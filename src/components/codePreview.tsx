@@ -4,12 +4,26 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { LuCopy, LuCheck } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
+// @ts-ignore
+import prettier from "prettier/standalone";
+// @ts-ignore
+import prettierPluginBabel from "prettier/parser-babel";
 
 interface CodePreviewProps {
   code: string;
   language: string;
 }
 const CodePreview = ({ code, language }: CodePreviewProps) => {
+  let formattedCode = "";
+  try {
+    formattedCode = prettier.format(code, {
+      parser: "babel",
+      plugins: [prettierPluginBabel],
+    });
+  } catch (error) {
+    formattedCode = code;
+  }
+
   const [isCopied, setIsCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -25,12 +39,12 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
 
   return (
     <div
-      className="relative overflow-auto rounded bg-[#282c34] max-w-4xl"
+      className="relative max-w-4xl overflow-auto rounded bg-[#282c34]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setTimeout(() => setIsHovered(false), 300)}
     >
-      <SyntaxHighlighter language={language} style={oneDark} >
-        {code}
+      <SyntaxHighlighter language={language} style={oneDark}>
+        {formattedCode}
       </SyntaxHighlighter>
       <AnimatePresence>
         {isHovered && (
