@@ -3,7 +3,6 @@
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import "@/styles/post.css";
 import ButtonWithIcon from "./Buttons/buttonWithIcon";
-import VotesContainer from "./votesContainer";
 import DividerPost from "./Dividers/dividerPost";
 import Footer from "./Post/footer";
 import CodePreview from "@/components/codePreview";
@@ -67,13 +66,22 @@ const Post = ({ post, compact = false }: PostProps) => {
   return (
     <>
       <div className="flex h-1/2 rounded-xl bg-neutral-50 p-2">
-        <div className="ml-5 mt-5 text-blue-800">
+        <div className="ml-5 mt-5 flex flex-col items-center text-zinc-400">
           <ButtonWithIcon
             onClick={handleUpVote}
             icon={FiArrowUp}
-            iconStyle={cn("text-3xl", currentVote === 1 && "text-red-500")}
+            iconStyle={cn("text-3xl", currentVote === 1 && "text-primary")}
           />
-          <VotesContainer votes={score} />
+          <VotesContainer
+            votes={score}
+            classColor={
+              currentVote === 1
+                ? "text-primary"
+                : currentVote === -1
+                ? "text-red-500"
+                : ""
+            }
+          />
           <ButtonWithIcon
             onClick={handleDownVote}
             icon={FiArrowDown}
@@ -112,6 +120,14 @@ const Post = ({ post, compact = false }: PostProps) => {
       </div>
     </>
   );
+};
+
+const VotesContainer = (props: {
+  votes: number;
+  classColor: HTMLSpanElement["className"];
+}) => {
+  const { votes, classColor } = props;
+  return <span className={`text-center ${classColor}`}>{votes}</span>;
 };
 
 export default Post;
