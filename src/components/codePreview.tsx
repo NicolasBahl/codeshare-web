@@ -24,7 +24,6 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
         });
         setFormattedCode(result);
       } catch (error) {
-        console.error(error);
         setFormattedCode(code);
       }
     };

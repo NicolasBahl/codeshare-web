@@ -2,13 +2,13 @@
 
 import React, {
   createContext,
-  useState,
-  useContext,
   PropsWithChildren,
+  useContext,
+  useState,
 } from "react";
 import ApiService from "@/utils/ApiService";
 import { LoginState } from "@/types/auth";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { UserData } from "@/types/user";
 import { useLocalStorage } from "usehooks-ts";
 import { LuLoader2 } from "react-icons/lu";
@@ -24,6 +24,7 @@ interface AuthContextType {
 }
 
 const AUTH_ROUTES = ["/login", "/register"];
+const AUTHENTICATED_ROUTES = ["/settings", "/questions/new"];
 
 // Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -40,6 +41,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // User authentication token and user data state
   const [authToken, setAuthToken] = useLocalStorage("access_token", null);
   const [user, setUser] = useState<UserData | null>(null);
+  const [authIsChecked, setAuthIsChecked] = useState<boolean>(false);
 
   // Navigation related hooks
   const router = useRouter();
@@ -48,49 +50,81 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // Check if user is authenticated
   const isAuthenticated = !!user;
 
-  // Function to verify authentication token
+  // Function checkAuth takes an authentication token, and checks for its validity
   const checkAuth = async (token: string) => {
+    // If the token doesn't exist end the function early
     if (!token) {
       setLoading(false);
+      setAuthIsChecked(true);
       return;
     }
+
+    // Begin loading state
     setLoading(true);
+
     try {
+      // Try to get the current user with the given token
       const res = await ApiService.getCurrentUser(token);
+
+      // If the response is successful and user is found, setUser with data from response
       if (res && res.status === 200) {
         setUser(res.data);
-      } else if (res && res.status === 401) {
+      }
+      // If the response has status 401 (unauthorized), clear the authentication token
+      else if (res && res.status === 401) {
         setAuthToken(null);
       }
     } catch (error) {
+      // If error occurs during the try block, setError with response from error caught
       setError("An error occurred while logging in.");
     } finally {
+      // In either case (success or failure), toggle off loading state and indicate the authentication has been checked
       setLoading(false);
+      setAuthIsChecked(true);
     }
   };
 
-  // When location changes, clear error and if authenticated user navigates to auth routes, redirect to home
+  // On routing or navigation, redirect based on authentication state
   React.useEffect(() => {
+    // Clear any existing error
     setError(null);
-    if (user && AUTH_ROUTES.includes(currentPage)) {
+
+    // If user is authenticated and tries to access auth routes, redirect to home page
+    if (authIsChecked && isAuthenticated && AUTH_ROUTES.includes(currentPage)) {
       router.push("/");
     }
-    setTimeout(() => setPageLoading(false), 500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, user]);
 
-  // Verify authentication when component mounts
+    // If user is not authenticated and tries to access routes that require authentication, redirect to login page
+    if (
+      authIsChecked &&
+      !isAuthenticated &&
+      AUTHENTICATED_ROUTES.includes(currentPage)
+    ) {
+      router.push("/login");
+    }
+
+    // End page loading after 500ms
+    setTimeout(() => setPageLoading(false), 500);
+
+    // Following line is to avoid eslint warning about dependencies in useEffect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, isAuthenticated, authIsChecked]);
+
+  // When the component mounts, verify the user's authentication
   React.useEffect(() => {
     if (authToken) {
       checkAuth(authToken);
     }
+
+    // Following line is to avoid eslint warning about dependencies in useEffect
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // If authentication token disappears, clear user data
+  // Clear user data if the authentication token disappears/gets cleared
   React.useEffect(() => {
     if (!authToken) {
       setUser(null);
+      setAuthIsChecked(true);
     }
   }, [authToken]);
 
@@ -134,7 +168,15 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // Exposing context to children
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isAuthenticated, error, loading, authToken }}
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated,
+        error,
+        loading,
+        authToken,
+      }}
     >
       {children}
     </AuthContext.Provider>
