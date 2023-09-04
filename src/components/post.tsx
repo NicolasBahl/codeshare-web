@@ -65,7 +65,7 @@ const Post = ({ post, compact = false }: PostProps) => {
 
   return (
     <>
-      <div className="flex h-1/2 rounded-xl bg-neutral-50 p-2">
+      <div className="flex h-1/2 rounded-xl bg-white p-2 py-5 shadow-[0px_10px_15px_5px_#f5f5f5]">
         <div className="ml-5 mt-5 flex flex-col items-center text-zinc-400">
           <ButtonWithIcon
             onClick={handleUpVote}
@@ -99,22 +99,24 @@ const Post = ({ post, compact = false }: PostProps) => {
             ) : (
               <h1 className="text-black-500 text-lg font-bold">{post.title}</h1>
             )}
-            <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
-              <p>{post.content}</p>
-              {post.code && !compact && (
-                <div className="my-5">
-                  <CodePreview
-                    language={post.stack.name.toLowerCase() || ""}
-                    code={post.code}
-                  />
-                </div>
-              )}
+            <div className="max-w-[95%]">
+              <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
+                <p>{post.content}</p>
+                {post.code && !compact && (
+                  <div className="my-5">
+                    <CodePreview
+                      language={post.stack.name.toLowerCase() || ""}
+                      code={post.code}
+                    />
+                  </div>
+                )}
+              </div>
+              <DividerPost />
+              <Footer
+                author={post.user.username}
+                onAuthorProfile={onAuthorProfile}
+              />
             </div>
-            <DividerPost />
-            <Footer
-              author={post.user.username}
-              onAuthorProfile={onAuthorProfile}
-            />
           </div>
         </div>
       </div>
@@ -125,7 +127,7 @@ const Post = ({ post, compact = false }: PostProps) => {
 const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
   const { author, onAuthorProfile } = props;
   return (
-    <div className="mt-4 flex justify-between">
+    <div className="py-4 flex justify-between">
       <div className="flex items-center space-x-10">
         <p className="pr-2 text-sm text-gray-500">
           <span className="px-1">Posted by</span>

@@ -2,6 +2,8 @@ import ApiService from "@/utils/ApiService";
 import Post from "@/components/post";
 import { Post as PostType } from "@/types/post";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { posts } = await getPosts();
   return (

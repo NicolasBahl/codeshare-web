@@ -37,20 +37,20 @@ class ApiService {
     return this.fetcher("/users/me", {
       method: "GET",
       headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
-      next: { revalidate: 60 },
+      next: { cache: "no-store" },
     });
   }
 
   getUserByUsername(username: string) {
     return this.fetcher(`/users/${username}`, {
-      next: { revalidate: 60 },
+      next: { cache: "no-store" },
     });
   }
 
   getPostById(id: string) {
     return this.fetcher(`/posts/${id}`, {
       method: "GET",
-      next: { revalidate: 10 },
+      next: { cache: "no-store" },
     });
   }
 
@@ -61,12 +61,15 @@ class ApiService {
   getTopUsers() {
     return this.fetcher("/users/top", {
       method: "GET",
-      next: { revalidate: 60 },
+      next: { revalidate: 10 },
     });
   }
 
   getPosts() {
-    return this.fetcher("/posts", { method: "GET", next: { revalidate: 10 } });
+    return this.fetcher("/posts", {
+      method: "GET",
+      next: { cache: "no-store" },
+    });
   }
 
   votePost(postId: string, value: -1 | 0 | 1, token: string) {

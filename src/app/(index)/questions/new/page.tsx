@@ -79,6 +79,7 @@ const CreatePage = () => {
 
       if (res && res.status === 201) {
         router.push(`/questions/${res.data.id}`);
+        router.refresh();
       } else {
         setError(res?.data?.error);
       }

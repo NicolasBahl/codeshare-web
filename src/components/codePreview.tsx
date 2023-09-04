@@ -4,25 +4,31 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { LuCopy, LuCheck } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
-// @ts-ignore
 import prettier from "prettier/standalone";
-// @ts-ignore
-import prettierPluginBabel from "prettier/parser-babel";
+import prettierPluginBabel from "prettier/plugins/babel";
 
 interface CodePreviewProps {
   code: string;
   language: string;
 }
 const CodePreview = ({ code, language }: CodePreviewProps) => {
-  let formattedCode = "";
-  try {
-    formattedCode = prettier.format(code, {
-      parser: "babel",
-      plugins: [prettierPluginBabel],
-    });
-  } catch (error) {
-    formattedCode = code;
-  }
+  const [formattedCode, setFormattedCode] = React.useState("");
+
+  React.useEffect(() => {
+    const formatCode = async (code: string) => {
+      try {
+        const result = await prettier.format(code, {
+          parser: "babel",
+          plugins: [prettierPluginBabel],
+        });
+        setFormattedCode(result);
+      } catch (error) {
+        setFormattedCode(code);
+      }
+    };
+
+    formatCode(code);
+  }, [code]);
 
   const [isCopied, setIsCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);

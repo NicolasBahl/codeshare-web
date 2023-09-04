@@ -1,7 +1,7 @@
 import React from "react";
 
 const DividerPost = () => {
-  return <div className="mt-4 mx-10 my-2 bg-neutral-500 h-px"></div>;
+  return <div className="my-2 mt-4 h-px w-full bg-neutral-200 px-10 "></div>;
 };
 
 export default DividerPost;
