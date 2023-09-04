@@ -6,6 +6,7 @@ import { LuCopy, LuCheck } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
 import prettier from "prettier/standalone";
 import prettierPluginBabel from "prettier/plugins/babel";
+import prettierPluginEstree from "prettier/plugins/estree";
 
 interface CodePreviewProps {
   code: string;
@@ -19,10 +20,11 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
       try {
         const result = await prettier.format(code, {
           parser: "babel",
-          plugins: [prettierPluginBabel],
+          plugins: [prettierPluginBabel, prettierPluginEstree],
         });
         setFormattedCode(result);
       } catch (error) {
+        console.error(error);
         setFormattedCode(code);
       }
     };
