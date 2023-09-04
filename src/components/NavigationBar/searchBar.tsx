@@ -96,7 +96,7 @@ export const SearchBar = (props: SearchBarProps) => {
         <input
           type="text"
           className="block w-full rounded-lg bg-gray-100 p-2 pl-10 text-gray-900"
-          placeholder="Search Here..."
+          placeholder="Search for anything..."
           onChange={handleChange}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}

@@ -4,6 +4,7 @@ import Menu from "@/components/menu";
 import TopUser from "@/components/topUser";
 import ApiService from "@/utils/ApiService";
 import Link from "next/link";
+import { FiPlus } from "react-icons/fi";
 
 const fetchTopUsers = async () => {
   const res = await ApiService.getTopUsers();
@@ -32,6 +33,7 @@ export default async function HomeLayout({
               href="/questions/new"
               className="inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
             >
+              <FiPlus className="mr-2" size={18} />
               Start a New Topic
             </Link>
             <div className="py-4" />

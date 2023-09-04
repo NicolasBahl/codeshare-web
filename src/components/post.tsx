@@ -13,6 +13,7 @@ import React from "react";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
+import LetterPicture from "@/components/LetterPicture";
 
 interface PostProps {
   post: Post;
@@ -22,7 +23,7 @@ interface PostProps {
 const Post = ({ post, compact = false }: PostProps) => {
   const { authToken } = useAuth();
   const [currentVote, setCurrentVote] = React.useState<number>(
-    post.user_current_vote || 0
+    post.user_current_vote || 0,
   );
   const router = useRouter();
 
@@ -97,7 +98,12 @@ const Post = ({ post, compact = false }: PostProps) => {
                 </h1>
               </Link>
             ) : (
-              <h1 className="text-black-500 text-lg font-bold">{post.title}</h1>
+              <div className="flex items-center gap-5">
+                <h1 className="text-black-500 text-lg font-bold">
+                  {post.title}
+                </h1>
+                <StackTag stack={post.stack.name} />
+              </div>
             )}
             <div className="max-w-[95%]">
               <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
@@ -128,11 +134,21 @@ const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
   const { author, onAuthorProfile } = props;
   return (
     <div className="py-4 flex justify-between">
-      <div className="flex items-center space-x-10">
+      <div className="flex items-center gap-1">
+        <LetterPicture
+          username={author}
+          height={100}
+          width={100}
+          fontSize={32}
+          style={{
+            height: "24px",
+            width: "24px",
+          }}
+        />
         <p className="pr-2 text-sm text-gray-500">
           <span className="px-1">Posted by</span>
           <span
-            className="cursor-pointer text-blue-800"
+            className="cursor-pointer text-primary"
             onClick={onAuthorProfile}
           >
             {author}
@@ -152,6 +168,14 @@ const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
         iconStyle={"text-base"}
       />
     </div>
+  );
+};
+
+const StackTag = ({ stack }: { stack: string }) => {
+  return (
+    <span className="bg-primary text-white text-xs px-4 py-1 rounded-sm font-bold">
+      {stack}
+    </span>
   );
 };
 
