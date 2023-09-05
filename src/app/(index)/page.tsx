@@ -6,7 +6,6 @@ import { Post as PostType } from "@/types/post";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { useAuth } from "@/contexts/AuthProvider";
-import { LuLoader2 } from "react-icons/lu";
 import React from "react";
 import Skeleton from "@/components/ui/skeleton";
 
@@ -22,7 +21,7 @@ export default function Home() {
   return (
     <>
       <main>
-        {data?.posts.length > 0 ? (
+        {data?.posts?.length > 0 ? (
           data?.posts.map((post: PostType) => (
             <div key={post.id} className="mb-5">
               <Post post={post} compact={true} />
