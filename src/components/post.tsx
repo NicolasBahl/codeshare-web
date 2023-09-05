@@ -89,8 +89,8 @@ const Post = ({ post, compact = false }: PostProps) => {
             iconStyle={cn("text-3xl", currentVote === -1 && "text-red-500")}
           />
         </div>
-        <div className="relative ml-10 mt-5 flex flex-col items-start">
-          <div className="ml-2">
+        <div className="relative ml-10 mt-5 flex flex-col items-start w-full">
+          <div className="ml-2 w-full">
             {compact ? (
               <Link href={`/questions/${post.id}`}>
                 <h1 className="text-black-500 text-lg font-bold">
