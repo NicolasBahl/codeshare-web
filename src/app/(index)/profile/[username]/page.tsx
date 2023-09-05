@@ -3,6 +3,7 @@ import Skeleton from "@/components/ui/skeleton";
 import ApiService from "@/utils/ApiService";
 import { notFound } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
+import ProfilePosts from "@/app/(index)/profile/[username]/profilePosts";
 
 const fetchUser = async (username: string) => {
   const res = await ApiService.getUserByUsername(username);
@@ -30,19 +31,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
       </div>
       <p className="mt-12 px-8 text-xl">Publications utilisateur</p>
       <div className="flex w-full flex-col items-center pt-5">
-        {/* for twice */}
-        {Array(4)
-          .fill(0)
-          .map((_, i) => (
-            // eslint-disable-next-line react/jsx-key
-            <div className="my-5 flex items-center space-x-4 rounded-xl bg-neutral-50 p-5">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-              </div>
-            </div>
-          ))}
+        <ProfilePosts userId={user?.id} />
       </div>
     </>
   );

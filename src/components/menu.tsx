@@ -23,8 +23,8 @@ const menuItems = [
   },
   {
     icon: <AiOutlineQuestion style={{ fontSize: "25px" }} />,
-    label: "My Topics",
-    link: "/",
+    label: "My Questions",
+    link: "/my-questions",
   },
   {
     icon: <AiOutlineMessage style={{ fontSize: "25px" }} />,

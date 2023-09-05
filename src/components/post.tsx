@@ -14,6 +14,7 @@ import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
 import LetterPicture from "@/components/LetterPicture";
+import post from "@/app/(index)/questions/[postId]/post";
 
 interface PostProps {
   post: Post;
@@ -121,6 +122,7 @@ const Post = ({ post, compact = false }: PostProps) => {
               <Footer
                 author={post.user.username}
                 onAuthorProfile={onAuthorProfile}
+                commentNumber={post._count?.comments || 0}
               />
             </div>
           </div>
@@ -130,7 +132,11 @@ const Post = ({ post, compact = false }: PostProps) => {
   );
 };
 
-const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
+const Footer = (props: {
+  author: string;
+  onAuthorProfile: () => void;
+  commentNumber: number;
+}) => {
   const { author, onAuthorProfile } = props;
   return (
     <div className="py-4 flex justify-between">
@@ -162,9 +168,9 @@ const Footer = (props: { author: string; onAuthorProfile: () => void }) => {
         }}
         icon={BiMessage}
         buttonStyle={
-          "text-gray-500 text-sm mr-2 flex justify-center items-center"
+          "text-gray-500 text-sm flex gap-1 justify-center items-center"
         }
-        buttonContent={"20+"}
+        buttonContent={props.commentNumber.toString()}
         iconStyle={"text-base"}
       />
     </div>

@@ -24,7 +24,7 @@ interface AuthContextType {
 }
 
 const AUTH_ROUTES = ["/login", "/register"];
-const AUTHENTICATED_ROUTES = ["/settings", "/questions/new"];
+const AUTHENTICATED_ROUTES = ["/settings", "/questions/new", "/my-questions"];
 
 // Create context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
