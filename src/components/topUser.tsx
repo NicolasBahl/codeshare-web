@@ -80,3 +80,4 @@ export default function TopUser({ topUsers }: { topUsers: topProps[] }) {
     </div>
   );
 }
+

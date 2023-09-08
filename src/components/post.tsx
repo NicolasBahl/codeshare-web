@@ -14,7 +14,7 @@ import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
 import LetterPicture from "@/components/LetterPicture";
-import post from "@/app/(index)/questions/[postId]/post";
+import Comments from "./comments";
 
 interface PostProps {
   post: Post;
@@ -118,12 +118,22 @@ const Post = ({ post, compact = false }: PostProps) => {
                   </div>
                 )}
               </div>
-              <DividerPost />
-              <Footer
-                author={post.user.username}
-                onAuthorProfile={onAuthorProfile}
-                commentNumber={post._count?.comments || 0}
-              />
+              {compact && (
+                <>
+                  <DividerPost />
+                  <Footer
+                    author={post.user.username}
+                    onAuthorProfile={onAuthorProfile}
+                    commentNumber={post._count?.comments || 0}
+                  />
+                </>
+              )}
+              {!compact && post?.comments.length > 0 && (
+                <div className="w-full">
+                  <DividerPost />
+                  <Comments postId={post.id} authorId={post.user_id} />
+                </div>
+              )}
             </div>
           </div>
         </div>
