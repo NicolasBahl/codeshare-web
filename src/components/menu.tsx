@@ -29,7 +29,7 @@ const menuItems = [
   {
     icon: <AiOutlineMessage style={{ fontSize: "25px" }} />,
     label: "My Answers",
-    link: "/",
+    link: "/my-answers",
   },
 ];
 

@@ -9,10 +9,10 @@ import React from "react";
 import Skeleton from "@/components/ui/skeleton";
 import Image from "next/image";
 
-export default function MyQuestion() {
+export default function MyAnswers() {
   return (
     <main>
-      <h1 className="font-bold text-xl pl-2 py-3">My Questions</h1>
+      <h1 className="font-bold text-xl pl-2 py-3">My Answers</h1>
       <ShowPosts />
     </main>
   );
@@ -22,7 +22,7 @@ const ShowPosts = () => {
   const { authToken } = useAuth();
 
   const { data, isLoading } = useSWR(
-    [`/posts/me`, authToken],
+    [`/posts/comments/me`, authToken],
     ([url, token]) => fetcher(url, token),
     { refreshInterval: 60000 }, // 1 minute
   );
@@ -55,7 +55,7 @@ const ShowPosts = () => {
             className="w-[300px]"
           />
           <p className="text-neutral-600">
-            You have not asked any questions yet.
+            You have not answered any questions yet.
           </p>
         </div>
       )}

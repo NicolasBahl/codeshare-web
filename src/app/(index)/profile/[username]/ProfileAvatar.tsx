@@ -32,7 +32,6 @@ const ProfileAvatar = ({ user }: { user: UserData }) => {
   };
   return (
     <div className="relative rounded-lg">
-      <a>{user?.id}</a>
       <div className="h-52 w-full bg-gradient-to-b from-violet-500 to-cyan-600 lg:rounded-t-lg"></div>
       <div className="absolute -bottom-24 left-20 flex h-44 w-44 items-center justify-center rounded-full border-8 border-white bg-gray-300">
         {profilePhoto ? (
