@@ -36,8 +36,9 @@ export default async function HomeLayout({
               <FiPlus className="mr-2" size={18} />
               Start a New Topic
             </Link>
-            <div className="py-4" />
-            <TopUser topUsers={topUsers} />
+            <div className="py-4 w-52">
+              <TopUser topUsers={topUsers} />
+            </div>
           </div>
         </div>
       </div>

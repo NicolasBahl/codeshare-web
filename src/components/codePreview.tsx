@@ -62,7 +62,7 @@ const CodePreview = ({ code, language }: CodePreviewProps) => {
             animate="visible"
             exit="hidden"
           >
-            <CopyToClipboard text={code} onCopy={onCopyText}>
+            <CopyToClipboard text={formattedCode} onCopy={onCopyText}>
               <button className="flex items-center justify-center rounded bg-gray-800 p-2 text-white hover:bg-gray-500">
                 {isCopied ? (
                   <motion.div

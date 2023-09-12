@@ -7,7 +7,6 @@ import {
 } from "react-icons/ai";
 import Link from "next/link";
 import "@/styles/post.css";
-import SearchBar from "./NavigationBar/searchBar";
 import cn from "@/utils/cn";
 
 const menuItems = [
