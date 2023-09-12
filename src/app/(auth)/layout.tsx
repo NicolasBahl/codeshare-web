@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AuthLayout({
   children,
@@ -18,13 +19,15 @@ export default function AuthLayout({
               alt="code thinking"
               className="h-full w-full object-cover"
             />
-            <Image
-              src="/codeshare.png"
-              alt="Logo"
-              width={1800}
-              height={306}
-              className=" absolute left-8 top-10 z-20 w-[200px]"
-            />
+            <Link href={"/"}>
+              <Image
+                src="/codeshare.png"
+                alt="Logo"
+                width={1800}
+                height={306}
+                className=" absolute left-8 top-10 z-20 w-[200px]"
+              />
+            </Link>
           </div>
         </div>
         <div className="flex h-screen w-full flex-1 justify-center px-5 md:px-0">

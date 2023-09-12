@@ -25,15 +25,19 @@ const Comments = ({
     <div className="w-full mt-9">
       <ul>
         {data?.comments?.map((comment: any) => (
-          <CommentItem key={comment.id} comment={comment} authorId={authorId} />
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            authorId={authorId}
+            isRoot={true}
+          />
         ))}
       </ul>
     </div>
   );
 };
 
-const CommentItem = ({ comment, authorId }: any) => {
-  const { user } = useAuth();
+const CommentItem = ({ comment, authorId, isRoot }: any) => {
   const [currentVote, setCurrentVote] = useState<number>(0); // État du vote actuel
   const initialScore = typeof comment.votes === "number" ? comment.votes : 0; // Score initial du commentaire
   const [score, setScore] = useState<number>(initialScore);
@@ -61,7 +65,8 @@ const CommentItem = ({ comment, authorId }: any) => {
     <div
       className={cn(
         "px-4 py-4 my-4 bg-[#fcfcfc]",
-        comment?.isAI && "bg-[#F8F9FD] border-blue-400 border",
+        comment?.isAI && "bg-[#F8F9FD]",
+        isRoot && "border-blue-400 border",
       )}
     >
       <li key={comment.id}>
@@ -88,17 +93,20 @@ const CommentItem = ({ comment, authorId }: any) => {
               }}
             />
           )}
-          <button
-            className="comment-content text-primary ml-2"
+          <div
+            className={cn(
+              "comment-content text-blue-400  ml-2",
+              !comment?.isAI && "cursor-pointer text-primary",
+            )}
             onClick={comment?.isAI ? () => {} : onAuthorProfile}
           >
             {comment?.isAI ? "BuddyAI" : comment?.author?.username || "Inconnu"}
-          </button>
+          </div>
           {comment?.author?.id === authorId && (
             <RxAvatar size={18} className="ml-1 mt-1" />
           )}
           {comment?.isAI && (
-            <div className="ml-2 bg-primary px-2 font-bold rounded flex items-center h-5">
+            <div className="ml-2 bg-blue-400 px-2 font-bold rounded flex items-center h-5">
               <span className="text-xs text-white">AI</span>
             </div>
           )}
@@ -136,7 +144,11 @@ const CommentItem = ({ comment, authorId }: any) => {
         {comment.childComments?.length > 0 && (
           <div className="pl-3">
             {comment.childComments.map((childComment: any) => (
-              <CommentItem key={childComment.id} comment={childComment} />
+              <CommentItem
+                key={childComment.id}
+                comment={childComment}
+                authorId={authorId}
+              />
             ))}
           </div>
         )}
