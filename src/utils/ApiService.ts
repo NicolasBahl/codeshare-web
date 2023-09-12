@@ -135,6 +135,26 @@ class ApiService {
       }),
     });
   }
+
+  getUserNotifications (token: string){
+    return this.fetcher("/users/notification", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  patchNotification (token: string, id: string){
+    return this.fetcher(`/users/notification/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 const apiService = new ApiService();

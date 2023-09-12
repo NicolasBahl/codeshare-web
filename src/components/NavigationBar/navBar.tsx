@@ -5,16 +5,20 @@ import React from "react";
 import Logo from "../../../public/codeshare.png";
 import randomUser from "../../../public/random_user.png";
 import SearchBar from "./searchBar";
-import { LuBell } from "react-icons/lu";
 import { GrClose, GrMenu } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import { MenuOverlay } from "../menu";
 import ProfileDropdown from "../profil";
+import Notification from "../Icons/Notification";
 
 const Navbar = () => {
   const [isOverlayMenuOpen, setIsOverlayMenuOpen] =
     React.useState<boolean>(false);
+
+  
   const router = useRouter();
+
+  
   return (
     <>
       <div className="relative z-50 flex h-24 w-full items-center bg-white px-10 shadow-lg">
@@ -47,11 +51,11 @@ const Navbar = () => {
           </>
           <SearchBar
             searchBarStyle="hidden lg:block w-1/4 xl:w-1/2"
-            onChange={(e) => {}}
+            onChange={(e) => { }}
           />
 
           <div className="flex items-center gap-5">
-            <LuBell className="cursor-pointer text-gray-600" size={20} />
+            <Notification  />
             <div className="p-4">
               <ProfileDropdown />
             </div>
