@@ -59,7 +59,7 @@ const CommentItem = ({
   const router = useRouter();
   const [replyText, setReplyText] = useState<string>("");
   const [isReplying, setIsReplying] = useState<boolean>(false);
-  const { authToken } = useAuth();
+  const { authToken, isAuthenticated } = useAuth();
 
   const handleUpVote = () => {
     if (currentVote !== 1) {
@@ -190,7 +190,11 @@ const CommentItem = ({
                 ) : (
                   <button
                     className="cursor-pointer "
-                    onClick={() => setIsReplying(true)}
+                    onClick={() =>
+                      isAuthenticated
+                        ? setIsReplying(true)
+                        : router.push("/login")
+                    }
                   >
                     Reply
                   </button>
