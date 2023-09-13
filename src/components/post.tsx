@@ -128,10 +128,11 @@ const Post = ({ post, compact = false }: PostProps) => {
                   />
                 </>
               )}
-              {!compact && post?.comments.length > 0 && (
+              {/* && post?.comments.length > 0 */}
+              {!compact && (
                 <div className="w-full">
                   <DividerPost />
-                  <Comments postId={post.id} authorId={post.user_id} />
+                  <Comments postId={post.id} postAuthorId={post.user_id} />
                 </div>
               )}
             </div>

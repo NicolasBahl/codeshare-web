@@ -114,6 +114,22 @@ class ApiService {
     });
   }
 
+  commentPost(postId: string, content:string, token: string) {
+    return this.fetcher(`/posts/${postId}/comment`, {
+      method: "POST",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ content }),
+    });
+  }
+
+  replyComment(postId: string, content:string, token: string, commentId: string) {
+    return this.fetcher(`/posts/${postId}/comments/${commentId}`, {
+      method: "POST",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ content }),
+    });
+  }
+
   createPost(post: {
     title: string;
     stack: string;

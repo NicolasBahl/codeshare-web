@@ -5,30 +5,40 @@ import { useAuth } from "@/contexts/AuthProvider";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { RxAvatar } from "react-icons/rx";
-import Link from "next/link";
 import LetterPicture from "@/components/LetterPicture";
 import ButtonWithIcon from "@/components/Buttons/buttonWithIcon";
-import { FiArrowDown, FiArrowUp } from "react-icons/fi";
+import { FiArrowDown, FiArrowUp, FiSend } from "react-icons/fi";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 
 const Comments = ({
   postId,
-  authorId,
+  postAuthorId,
 }: {
   postId: string;
-  authorId: string;
+  postAuthorId: string;
 }) => {
-  const { data } = useSWR(`/posts/${postId}/comments`, (url) => fetcher(url));
+  const { data, mutate: refreshData } = useSWR(
+    `/posts/${postId}/comments`,
+    (url) => fetcher(url),
+  );
+  const { authToken } = useAuth();
 
   return (
     <div className="w-full mt-9">
+      <CommentInput
+        authToken={authToken as string}
+        postId={postId}
+        refreshData={refreshData}
+      />
       <ul>
-        {data?.comments?.map((comment: any) => (
+        {data?.comments?.map((comment: Comment) => (
           <CommentItem
             key={comment.id}
             comment={comment}
-            authorId={authorId}
+            postId={postId}
+            postAuthorId={postAuthorId}
+            refreshData={refreshData}
             isRoot={true}
           />
         ))}
@@ -37,11 +47,19 @@ const Comments = ({
   );
 };
 
-const CommentItem = ({ comment, authorId, isRoot }: any) => {
-  const [currentVote, setCurrentVote] = useState<number>(0); // État du vote actuel
-  const initialScore = typeof comment.votes === "number" ? comment.votes : 0; // Score initial du commentaire
-  const [score, setScore] = useState<number>(initialScore);
+const CommentItem = ({
+  comment,
+  postAuthorId,
+  postId,
+  refreshData,
+  isRoot,
+}: CommentItemProps) => {
+  const [currentVote, setCurrentVote] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const router = useRouter();
+  const [replyText, setReplyText] = useState<string>("");
+  const [isReplying, setIsReplying] = useState<boolean>(false);
+  const { authToken } = useAuth();
 
   const handleUpVote = () => {
     if (currentVote !== 1) {
@@ -61,8 +79,26 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
     router.push(`/profile/${comment?.author?.username}`);
   };
 
+  const submitReply = async () => {
+    if (!authToken) return;
+    let message = replyText;
+    if (!isRoot) {
+      message = `@${comment?.author?.username} ${message}`;
+    }
+    await apiService.replyComment(
+      postId,
+      message,
+      authToken,
+      isRoot ? (comment.id as string) : (comment.parentId as string),
+    );
+    setReplyText("");
+    setIsReplying(false);
+    refreshData().then(() => {});
+  };
+
   return (
     <div
+      id={"comment-" + comment.id}
       className={cn(
         "px-4 py-4 my-4 bg-[#fcfcfc]",
         comment?.isAI
@@ -75,6 +111,7 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
           {comment?.isAI ? (
             <>
               <div className={`rounded-full bg-primary h-8 w-8`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/ai-avatar.png"
                   alt="ai"
@@ -103,7 +140,7 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
           >
             {comment?.isAI ? "BuddyAI" : comment?.author?.username || "Inconnu"}
           </div>
-          {comment?.author?.id === authorId && (
+          {comment?.author?.id === postAuthorId && (
             <RxAvatar size={18} className="ml-1 mt-1" />
           )}
           {comment?.isAI && (
@@ -126,7 +163,7 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
               iconStyle={cn("text-xl", currentVote === -1 && "text-red-500")}
             />
           </div>
-          <div className="text-neutral-500 ml-8">
+          <div className="text-neutral-500 ml-8 w-full">
             <div className="comment-content mt-0">{comment?.content}</div>
             {comment?.isAI ? (
               <div className="mt-2 text-xs text-neutral-500">
@@ -134,9 +171,30 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
               </div>
             ) : (
               <div className="flex items-center mt-5 text-sm">
-                <button className="cursor-pointer " onClick={() => {}}>
-                  Reply
-                </button>
+                {isReplying ? (
+                  <>
+                    <textarea
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                      placeholder="Reply to comment..."
+                      rows={2}
+                    />
+                    <button
+                      className="cursor-pointer ml-2"
+                      onClick={submitReply}
+                    >
+                      <FiSend size={18} className="ml-1 mt-1" />
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="cursor-pointer "
+                    onClick={() => setIsReplying(true)}
+                  >
+                    Reply
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -148,7 +206,9 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
               <CommentItem
                 key={childComment.id}
                 comment={childComment}
-                authorId={authorId}
+                postAuthorId={postAuthorId}
+                postId={postId}
+                refreshData={refreshData}
               />
             ))}
           </div>
@@ -157,4 +217,57 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
     </div>
   );
 };
+
+interface CommentItemProps {
+  comment: Comment;
+  postId: string;
+  postAuthorId: string;
+  refreshData: () => Promise<void>;
+  isRoot?: boolean;
+}
+
+const CommentInput = ({
+  authToken,
+  postId,
+  refreshData,
+}: {
+  authToken: string;
+  postId: string;
+  refreshData: () => Promise<void>;
+}) => {
+  const [mainCommentText, setMainCommentText] = useState<string>("");
+  const handleMainCommentSubmit = async () => {
+    if (!authToken) return;
+    const res = await apiService.commentPost(
+      postId,
+      mainCommentText,
+      authToken,
+    );
+    setMainCommentText("");
+    await refreshData();
+
+    const newCommentElement = document.getElementById(`comment-${res.data.id}`);
+    if (newCommentElement) {
+      newCommentElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  return (
+    <div className="flex items-center mt-5 text-sm">
+      <textarea
+        className="block p-2.5 w-full text-sm text-gray-900 bg-grayw-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        value={mainCommentText}
+        onChange={(e) => setMainCommentText(e.target.value)}
+        placeholder="Reply to the post..."
+        rows={2}
+      />
+      <button
+        className="mt-2 cursor-pointer ml-2 text-neutral-500"
+        onClick={handleMainCommentSubmit}
+      >
+        <FiSend size={18} className="ml-1 mt-1" />
+      </button>
+    </div>
+  );
+};
+
 export default Comments;
