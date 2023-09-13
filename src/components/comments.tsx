@@ -65,8 +65,9 @@ const CommentItem = ({ comment, authorId, isRoot }: any) => {
     <div
       className={cn(
         "px-4 py-4 my-4 bg-[#fcfcfc]",
-        comment?.isAI && "bg-[#F8F9FD]",
-        isRoot && "border-blue-400 border",
+        comment?.isAI
+          ? ["bg-[#F8F9FD]", isRoot && "border-blue-400 border"]
+          : "",
       )}
     >
       <li key={comment.id}>

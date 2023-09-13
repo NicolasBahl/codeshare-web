@@ -3,22 +3,21 @@
 import Image from "next/image";
 import React from "react";
 import Logo from "../../../public/codeshare.png";
-import randomUser from "../../../public/random_user.png";
 import SearchBar from "./searchBar";
 import { GrClose, GrMenu } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import { MenuOverlay } from "../menu";
 import ProfileDropdown from "../profil";
 import Notification from "../Icons/Notification";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const Navbar = () => {
+  const { isAuthenticated } = useAuth();
   const [isOverlayMenuOpen, setIsOverlayMenuOpen] =
     React.useState<boolean>(false);
 
-  
   const router = useRouter();
 
-  
   return (
     <>
       <div className="relative z-50 flex h-24 w-full items-center bg-white px-10 shadow-lg">
@@ -51,14 +50,12 @@ const Navbar = () => {
           </>
           <SearchBar
             searchBarStyle="hidden lg:block w-1/4 xl:w-1/2"
-            onChange={(e) => { }}
+            onChange={(e) => {}}
           />
 
-          <div className="flex items-center gap-5">
-            <Notification  />
-            <div className="p-4">
-              <ProfileDropdown />
-            </div>
+          <div className="flex items-center gap-5 w-12">
+            {isAuthenticated && <Notification />}
+            <ProfileDropdown />
           </div>
         </div>
       </div>
