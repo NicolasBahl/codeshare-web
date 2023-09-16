@@ -22,15 +22,17 @@ const Comments = ({
     `/posts/${postId}/comments`,
     (url) => fetcher(url),
   );
-  const { authToken } = useAuth();
+  const { authToken, isAuthenticated } = useAuth();
 
   return (
     <div className="w-full mt-9">
-      <CommentInput
-        authToken={authToken as string}
-        postId={postId}
-        refreshData={refreshData}
-      />
+      {isAuthenticated && (
+        <CommentInput
+          authToken={authToken as string}
+          postId={postId}
+          refreshData={refreshData}
+        />
+      )}
       <ul>
         {data?.comments?.map((comment: Comment) => (
           <CommentItem
