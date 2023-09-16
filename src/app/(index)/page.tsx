@@ -12,7 +12,7 @@ import Skeleton from "@/components/ui/skeleton";
 export default function Home() {
   const { authToken } = useAuth();
 
-  const { data, isLoading } = useSWR(
+  const { data, mutate: refreshData, isLoading } = useSWR(
     [`/posts`, authToken],
     ([url, token]) => fetcher(url, token),
     { refreshInterval: 60000 }, // 1 minute
@@ -24,7 +24,7 @@ export default function Home() {
         {data?.posts?.length > 0 ? (
           data?.posts.map((post: PostType) => (
             <div key={post.id} className="mb-5">
-              <Post post={post} compact={true} />
+              <Post post={post} compact={true} refreshData={refreshData} />
             </div>
           ))
         ) : (

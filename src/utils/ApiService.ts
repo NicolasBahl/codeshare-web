@@ -8,7 +8,12 @@ class ApiService {
         headers: this.DEFAULT_HEADERS,
         ...options,
       });
-      const data = await res.json();
+
+      let data;
+
+      if (res.status !== 204) {
+        data = await res.json();
+      }
 
       return {
         status: res.status,
@@ -127,6 +132,20 @@ class ApiService {
       method: "POST",
       headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
       body: JSON.stringify({ content }),
+    });
+  }
+
+  deletePost(postId: string, token: string) {
+    return this.fetcher(`/posts/${postId}`, {
+      method: "DELETE",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
+    });
+  }
+
+  deleteComment(postId: string, commentId: string, token: string) {
+    return this.fetcher(`/posts/${postId}/comments/${commentId}`, {
+      method: "DELETE",
+      headers: { ...this.DEFAULT_HEADERS, Authorization: `Bearer ${token}` },
     });
   }
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { FiArrowUp, FiArrowDown } from "react-icons/fi";
 import "@/styles/post.css";
 import ButtonWithIcon from "./Buttons/buttonWithIcon";
@@ -15,14 +13,17 @@ import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
 import LetterPicture from "@/components/LetterPicture";
 import Comments from "./comments";
+import { AiOutlineDelete } from "react-icons/ai";
+
 
 interface PostProps {
   post: Post;
   compact?: boolean;
+  refreshData?: () => void;
 }
 
-const Post = ({ post, compact = false }: PostProps) => {
-  const { authToken } = useAuth();
+const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
+  const { authToken, user } = useAuth();
   const [currentVote, setCurrentVote] = React.useState<number>(
     post.user_current_vote || 0,
   );
@@ -41,7 +42,7 @@ const Post = ({ post, compact = false }: PostProps) => {
 
   const handleUpVote = async () => {
     if (!authToken) return;
-    if (currentVote == 1) {
+    if (currentVote === 1) {
       const res = await apiService.votePost(post.id, 0, authToken);
       setCurrentVote(0);
       setScore(res.data.score);
@@ -54,7 +55,7 @@ const Post = ({ post, compact = false }: PostProps) => {
 
   const handleDownVote = async () => {
     if (!authToken) return;
-    if (currentVote == -1) {
+    if (currentVote === -1) {
       const res = await apiService.votePost(post.id, 0, authToken);
       setCurrentVote(0);
       setScore(res.data.score);
@@ -65,76 +66,95 @@ const Post = ({ post, compact = false }: PostProps) => {
     }
   };
 
+  // refresh data from post when the post are deleted
+
+  const deletePost = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!authToken) return;
+    await apiService.deletePost(post.id, authToken);
+    refreshData?.();
+    router.push(`/`);
+  };
+
   return (
     <>
-      <div className="flex h-1/2 rounded-xl bg-white p-2 py-5 shadow-[0px_10px_15px_5px_#f5f5f5]">
-        <div className="ml-5 mt-5 flex flex-col items-center text-zinc-400">
-          <ButtonWithIcon
-            onClick={handleUpVote}
-            icon={FiArrowUp}
-            iconStyle={cn("text-3xl", currentVote === 1 && "text-primary")}
-          />
-          <VotesContainer
-            votes={score}
-            classColor={
-              currentVote === 1
-                ? "text-primary"
-                : currentVote === -1
-                ? "text-red-500"
-                : ""
-            }
-          />
-          <ButtonWithIcon
-            onClick={handleDownVote}
-            icon={FiArrowDown}
-            iconStyle={cn("text-3xl", currentVote === -1 && "text-red-500")}
-          />
-        </div>
-        <div className="relative ml-10 mt-5 flex flex-col items-start w-full">
-          <div className="ml-2 w-full">
-            {compact ? (
-              <Link href={`/questions/${post.id}`}>
-                <h1 className="text-black-500 text-lg font-bold">
-                  {post.title}
-                </h1>
-              </Link>
-            ) : (
-              <div className="flex items-center gap-5">
-                <h1 className="text-black-500 text-lg font-bold">
-                  {post.title}
-                </h1>
-                <StackTag stack={post.stack.name} />
-              </div>
-            )}
-            <div className="max-w-[95%]">
-              <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
-                <p>{post.content}</p>
-                {post.code && !compact && (
-                  <div className="my-5">
-                    <CodePreview
-                      language={post.stack.name.toLowerCase() || ""}
-                      code={post.code}
+      <div className="relative w-full">
+        {post?.user.id === user?.id && (
+          <button className="absolute top-5 right-5 p-2 z-10" onClick={deletePost}>
+            <AiOutlineDelete
+              className="text-2xl text-red-500"
+              style={{ pointerEvents: "none" }}
+            />
+          </button>
+        )}
+        <div className="flex h-1/2 rounded-xl bg-white p-2 py-5 shadow-[0px_10px_15px_5px_#f5f5f5]">
+          <div className="ml-5 mt-5 flex flex-col items-center text-zinc-400">
+            <ButtonWithIcon
+              onClick={handleUpVote}
+              icon={FiArrowUp}
+              iconStyle={cn("text-3xl", currentVote === 1 && "text-primary")}
+            />
+            <VotesContainer
+              votes={score}
+              classColor={
+                currentVote === 1
+                  ? "text-primary"
+                  : currentVote === -1
+                  ? "text-red-500"
+                  : ""
+              }
+            />
+            <ButtonWithIcon
+              onClick={handleDownVote}
+              icon={FiArrowDown}
+              iconStyle={cn("text-3xl", currentVote === -1 && "text-red-500")}
+            />
+          </div>
+          <div className="relative ml-10 mt-5 flex flex-col items-start w-full">
+            <div className="ml-2 w-full">
+              {compact ? (
+                <Link href={`/questions/${post.id}`}>
+                  <h1 className="text-black-500 text-lg font-bold">
+                    {post.title}
+                  </h1>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-5">
+                  <h1 className="text-black-500 text-lg font-bold">
+                    {post.title}
+                  </h1>
+                  <StackTag stack={post.stack.name} />
+                </div>
+              )}
+              <div className="max-w-[95%]">
+                <div className="mt-2 overflow-y-auto text-sm text-neutral-500">
+                  <p>{post.content}</p>
+                  {post.code && !compact && (
+                    <div className="my-5">
+                      <CodePreview
+                        language={post.stack.name.toLowerCase() || ""}
+                        code={post.code}
+                      />
+                    </div>
+                  )}
+                </div>
+                {compact && (
+                  <>
+                    <DividerPost />
+                    <Footer
+                      author={post.user.username}
+                      onAuthorProfile={onAuthorProfile}
+                      commentNumber={post._count?.comments || 0}
                     />
+                  </>
+                )}
+                {!compact && (
+                  <div className="w-full">
+                    <DividerPost />
+                    <Comments postId={post.id} postAuthorId={post.user_id} />
                   </div>
                 )}
               </div>
-              {compact && (
-                <>
-                  <DividerPost />
-                  <Footer
-                    author={post.user.username}
-                    onAuthorProfile={onAuthorProfile}
-                    commentNumber={post._count?.comments || 0}
-                  />
-                </>
-              )}
-              {/* && post?.comments.length > 0 */}
-              {!compact && (
-                <div className="w-full">
-                  <DividerPost />
-                  <Comments postId={post.id} postAuthorId={post.user_id} />
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -171,7 +191,6 @@ const Footer = (props: {
             {author}
           </span>
         </p>
-        {/* <p className="text-gray-500 text-sm">{createdAt.toDateString()}</p> */}
       </div>
       <ButtonWithIcon
         onClick={() => {
@@ -204,4 +223,4 @@ const VotesContainer = (props: {
   return <span className={`text-center ${classColor}`}>{votes}</span>;
 };
 
-export default Post;
+export default PostComponent;

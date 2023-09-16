@@ -59,7 +59,7 @@ const CommentItem = ({
   const router = useRouter();
   const [replyText, setReplyText] = useState<string>("");
   const [isReplying, setIsReplying] = useState<boolean>(false);
-  const { authToken, isAuthenticated } = useAuth();
+  const { authToken, isAuthenticated, user } = useAuth();
 
   const handleUpVote = () => {
     if (currentVote !== 1) {
@@ -94,6 +94,13 @@ const CommentItem = ({
     setReplyText("");
     setIsReplying(false);
     refreshData().then(() => {});
+  };
+
+  const deleteComment = async () => {
+    if (!authToken) return;
+    await apiService.deleteComment(postId, comment.id, authToken);
+    refreshData?.();
+    router.push(`/questions/${postId}`);
   };
 
   return (
@@ -188,16 +195,26 @@ const CommentItem = ({
                     </button>
                   </>
                 ) : (
-                  <button
-                    className="cursor-pointer "
-                    onClick={() =>
-                      isAuthenticated
-                        ? setIsReplying(true)
-                        : router.push("/login")
-                    }
-                  >
-                    Reply
-                  </button>
+                  <div className="space-x-4">
+                    <button
+                      className="cursor-pointer"
+                      onClick={() =>
+                        isAuthenticated
+                          ? setIsReplying(true)
+                          : router.push("/login")
+                      }
+                    >
+                      Reply
+                    </button>
+                    {comment?.author.id === user?.id && (
+                      <button
+                        className="cursor-pointer text-red-500"
+                        onClick={deleteComment}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             )}
