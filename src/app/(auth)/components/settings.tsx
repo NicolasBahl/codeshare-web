@@ -27,24 +27,30 @@ interface SettingsProps {
     onSubmit: () => void;
     type: 'password' | 'email'
     response: Response | undefined
+    oldValue?: string
+    value?: string
 
 }
 
 const Settings = (props: SettingsProps) => {
-    const { title, oldLabel, newLabel, oldPlaceholder, newPlaceholder, oldType, newType, onChangeOld, onChangeNew, onSubmit, type, response } = props;
+    const { value, oldValue, title, oldLabel, newLabel, oldPlaceholder, newPlaceholder, oldType, newType, onChangeOld, onChangeNew, onSubmit, type, response } = props;
     const fadeVariant = {
-        hidden: { opacity: 0, transition: { duration: 2 } },
-        visible: { opacity: 1, transition: { duration: 2 } },
+
+        visible: { display: "block", transition: { duration: 2 } },
     };
     const renderResponse = () => {
         if (response) {
             if (response.status === 200) {
                 return (
                     <motion.div
+                        animate={{
+                            transitionEnd: {
+                                display: "none",
+                            }
+                        }}
                         className="my-2 mx-2"
                         variants={fadeVariant}
                         initial="visible"
-                        animate="hidden"
                     >
                         <BannerAlert message={response.data.message as string} type="success" />
                     </motion.div >
@@ -102,6 +108,7 @@ const Settings = (props: SettingsProps) => {
                                 <>
 
                                     <Input
+                                        value={oldValue}
                                         onChange={onChangeOld}
                                         label={oldLabel}
                                         className="my-2 "
@@ -110,6 +117,7 @@ const Settings = (props: SettingsProps) => {
                                     />
 
                                     <Input
+                                        value={value}
                                         onChange={onChangeNew}
                                         label={newLabel}
                                         className="my-2"
@@ -122,6 +130,7 @@ const Settings = (props: SettingsProps) => {
                                 :
                                 <Input
                                     onChange={onChangeNew}
+                                    value={value}
                                     label={newLabel}
                                     className="my-2"
                                     placeholder={newPlaceholder}
