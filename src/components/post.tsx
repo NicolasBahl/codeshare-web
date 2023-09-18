@@ -141,8 +141,8 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
                 currentVote === 1
                   ? "text-primary"
                   : currentVote === -1
-                  ? "text-red-500"
-                  : ""
+                    ? "text-red-500"
+                    : ""
               }
             />
             <ButtonWithIcon
@@ -248,9 +248,43 @@ const Footer = (props: {
   );
 };
 
+const getStackColor = (stack: string) => {
+  switch (stack) {
+    case 'C#':
+      return '#370090';
+    case 'C':
+      return 'rgb(171,187,206)';
+    case 'C++':
+      return '#044F88';
+    case 'CSS':
+      return '#2965f1 ';
+    case 'HTML':
+      return '#f06529';
+    case 'JavaScript':
+      return '#F7E018';
+    case 'Go':
+      return "#29BDB1";
+    case 'PHP':
+      return '#AEB2D5';
+    case 'Java':
+      return 'linear-gradient(98.3deg, rgb(0, 0, 0) 10.6%, rgb(255, 0, 0) 97.7%)';
+    case 'Python':
+      return '#3670A0';
+    case 'Ruby':
+      return '#BE1B0E';
+    case 'Swift':
+      return '#FC933A';
+    case 'TypeScript':
+      return '#007acc';
+    default:
+      return 'radial-gradient(circle at 7.5% 24%, rgb(237, 161, 193) 0%, rgb(250, 178, 172) 25.5%, rgb(190, 228, 210) 62.3%, rgb(215, 248, 247) 93.8%)';
+  }
+};
+
+
 const StackTag = ({ stack }: { stack: string }) => {
   return (
-    <span className="bg-primary text-white text-xs px-4 py-1 rounded-sm font-bold">
+    <span style={{ background: getStackColor(stack) }} className=" text-white text-xs px-4 py-1 rounded-sm font-bold">
       {stack}
     </span>
   );
