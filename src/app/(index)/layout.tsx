@@ -31,7 +31,7 @@ export default async function HomeLayout({
           <div className="hidden px-5 lg:block">
             <Link
               href="/questions/new"
-              className="inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
+              className="inline-flex h-9 w-64 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90"
             >
               <FiPlus className="mr-2" size={18} />
               Start a New Topic

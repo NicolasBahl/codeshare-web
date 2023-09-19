@@ -28,11 +28,11 @@ export default function TopUser({ topUsers }: { topUsers: topProps[] }) {
   };
 
   return (
-    <div className="rounded-lg bg-white p-5 shadow-md">
+    <div className="rounded-lg bg-white p-5 shadow-md w-64">
       <h1 className="mb-2 font-bold text-gray-500">Top Users</h1>
       {topUsers && topUsers.map((item, index) => (
         <div key={index} className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3">
             <LetterPicture
               username={item.username}
               height={100}
