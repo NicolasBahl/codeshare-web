@@ -17,8 +17,8 @@ const menuItems = [
   },
   {
     icon: <AiOutlineCompass style={{ fontSize: "25px" }} />,
-    label: "Explore Topics",
-    link: "/",
+    label: "Levels",
+    link: "/levels",
   },
   {
     icon: <AiOutlineQuestion style={{ fontSize: "25px" }} />,
