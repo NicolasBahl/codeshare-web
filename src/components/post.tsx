@@ -7,14 +7,14 @@ import { Post } from "@/types/post";
 import Link from "next/link";
 import apiService from "@/utils/ApiService";
 import { useAuth } from "@/contexts/AuthProvider";
-import React from "react";
+import React, {useRef, useState} from "react";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
 import LetterPicture from "@/components/LetterPicture";
 import Comments from "./comments";
-import { AiOutlineDelete } from "react-icons/ai";
-
+import { FiMoreVertical } from "react-icons/fi";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 interface PostProps {
   post: Post;
@@ -23,11 +23,23 @@ interface PostProps {
 }
 
 const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
+  const ref = useRef<HTMLDivElement>(null);
   const { authToken, user } = useAuth();
   const [currentVote, setCurrentVote] = React.useState<number>(
     post.user_current_vote || 0,
   );
   const router = useRouter();
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+
+  const toggleConfirmationModal = () => {
+    setIsConfirmationModalOpen(!isConfirmationModalOpen);
+  };
+
+  const toggleMoreMenu = () => {
+    setIsMoreMenuOpen(!isMoreMenuOpen);
+
+  };
 
   // Update the current vote and score when the post refresh
   React.useEffect(() => {
@@ -66,8 +78,6 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
     }
   };
 
-  // refresh data from post when the post are deleted
-
   const deletePost = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (!authToken) return;
@@ -76,16 +86,47 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
     router.push(`/`);
   };
 
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent): void {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [])
   return (
     <>
-      <div className="relative w-full">
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={toggleConfirmationModal}
+        onConfirm={deletePost}
+        isPost={true}
+      />
+      <div  className="relative w-full">
         {post?.user.id === user?.id && (
-          <button className="absolute top-5 right-5 p-2 z-10" onClick={deletePost}>
-            <AiOutlineDelete
-              className="text-2xl text-red-500"
-              style={{ pointerEvents: "none" }}
-            />
-          </button>
+            <div ref={ref}   className="absolute inline-block top-5 right-5 p-2 z-10">
+            <button className=" z-10" onClick={toggleMoreMenu}>
+              <FiMoreVertical className="text-2xl" />
+            </button>
+            { isMoreMenuOpen && (
+              <div  className="absolute top-10 right-0 bg-white border rounded shadow-md  mr-0">
+                <button
+                    className="block w-full text-left p-2 hover:bg-gray-100"
+                >
+                  Edit
+                </button>
+                <button
+                  className="block w-full text-left p-2 text-red-500 hover:bg-gray-100"
+                  onClick={toggleConfirmationModal}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         )}
         <div className="flex h-1/2 rounded-xl bg-white p-2 py-5 shadow-[0px_10px_15px_5px_#f5f5f5]">
           <div className="ml-5 mt-5 flex flex-col items-center text-zinc-400">

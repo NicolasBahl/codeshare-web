@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useRef, useState} from "react";
 import "@/styles/post.css";
 import apiService from "@/utils/ApiService";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -10,6 +10,8 @@ import ButtonWithIcon from "@/components/Buttons/buttonWithIcon";
 import { FiArrowDown, FiArrowUp, FiSend } from "react-icons/fi";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
+import { FiMoreHorizontal } from "react-icons/fi";
+import ConfirmationModal from "./ConfirmationModal";
 
 const Comments = ({
   postId,
@@ -62,6 +64,9 @@ const CommentItem = ({
   const [replyText, setReplyText] = useState<string>("");
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const { authToken, isAuthenticated, user } = useAuth();
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleUpVote = () => {
     if (currentVote !== 1) {
@@ -105,6 +110,26 @@ const CommentItem = ({
     router.push(`/questions/${postId}`);
   };
 
+  const toggleMoreMenu = () => {
+    setIsMoreMenuOpen(!isMoreMenuOpen);
+  };
+
+  const toggleConfirmationModal = () => {
+    setIsConfirmationModalOpen(!isConfirmationModalOpen);
+  };
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent): void {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [])
+
   return (
     <div
       id={"comment-" + comment.id}
@@ -115,12 +140,17 @@ const CommentItem = ({
           : "",
       )}
     >
+      <ConfirmationModal
+          isOpen={isConfirmationModalOpen}
+          onClose={toggleConfirmationModal}
+          onConfirm={deleteComment}
+          isPost={false}
+      />
       <li key={comment.id}>
         <div className="flex">
           {comment?.isAI ? (
             <>
               <div className={`rounded-full bg-primary h-8 w-8`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/ai-avatar.png"
                   alt="ai"
@@ -197,24 +227,39 @@ const CommentItem = ({
                     </button>
                   </>
                 ) : (
-                  <div className="space-x-4">
-                    <button
-                      className="cursor-pointer"
-                      onClick={() =>
-                        isAuthenticated
-                          ? setIsReplying(true)
-                          : router.push("/login")
-                      }
-                    >
-                      Reply
-                    </button>
-                    {comment?.author.id === user?.id && (
+                  <div ref={ref} className="flex justify-between items-center space-x-96">
+                    <div className="flex  items-center space-x-96">
                       <button
-                        className="cursor-pointer text-red-500"
-                        onClick={deleteComment}
+                        className="cursor-pointer"
+                        onClick={() =>
+                          isAuthenticated
+                            ? setIsReplying(true)
+                            : router.push("/login")
+                        }
                       >
-                        Delete
+                        Reply
                       </button>
+                      {comment?.author.id === user?.id && (
+                        <button
+                          className="cursor-pointer"
+                          onClick={toggleMoreMenu}
+                        >
+                          <FiMoreHorizontal size={21} />
+                        </button>
+                      )}
+                    </div>
+                    {isMoreMenuOpen && (
+                      <div className="absolute right-0 bg-white border rounded shadow-md  mr-0">
+                        <button className="block w-full text-left p-2 hover:bg-gray-100">
+                          Edit
+                        </button>
+                        <button
+                          className="block w-full text-left p-2 text-red-500 hover:bg-gray-100"
+                          onClick={toggleConfirmationModal}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
