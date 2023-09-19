@@ -21,18 +21,19 @@ const scores = [
 
 export const Levels = () => {
     const { user } = useAuth();
-    const getProgressBar = (first: number, last: number) => {
+    const getProgressBar = (first: number) => {
         if (user?.score && user?.score > first || user?.score === first) return '#4C9CCD';
         else {
             return 'gray';
-        } 101
+        }
     }
 
 
     return (
         <>
-            <h1 className="text-4xl text-center font-semibold mb-6">Levels</h1>
-            <p className="text-[#4C9CCD] text-1xl text-center font-semibold mb-6">Your have currently {user?.score} points</p>
+            <h1 className="text-4xl text-center font-semibold mb-6 mt-4">Levels</h1>
+            {user && user?.score &&
+                <p className="text-[#4C9CCD] text-1xl text-center font-semibold mb-6">Your have currently {user?.score} points</p>}
             {
                 scores.map((score, index) => {
                     return (
@@ -43,16 +44,16 @@ export const Levels = () => {
                                     <div className="flex md:contents">
                                         <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
                                             <div className="h-full w-6 flex items-center justify-center">
-                                                {score.name !== 'Seedling' && <div style={{ backgroundColor: getProgressBar(score.scoreFirst, score.lastScore) }} className="w-0.5 h-5/6   relative top-20 left-1">
+                                                {score.name !== 'Seedling' && <div style={{ backgroundColor: getProgressBar(score.scoreFirst) }} className="w-0.5 h-5/6   relative top-20 left-1">
                                                 </div>}
                                             </div>
 
-                                            <div style={{ backgroundColor: getProgressBar(score.scoreFirst, score.lastScore) }} className="w-8 h-8 absolute top-1/2 -mt-3 rounded-full  shadow text-center flex items-center justify-center" >
+                                            <div style={{ backgroundColor: getProgressBar(score.scoreFirst) }} className="w-8 h-8 absolute top-1/2 -mt-3 rounded-full  shadow text-center flex items-center justify-center" >
                                                 {emoji.emojify(score.emoji)}
                                             </div>
                                         </div>
                                         <div className="bg-red col-start-4 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
-                                            <h3 style={{ color: getProgressBar(score.scoreFirst, score.lastScore) }} className=" font-semibold text-lg mb-1 ">{score.name}</h3>
+                                            <h3 style={{ color: getProgressBar(score.scoreFirst) }} className=" font-semibold text-lg mb-1 ">{score.name}</h3>
 
                                             <p className='text-neutral-400'>{score.required}</p>
                                         </div>
