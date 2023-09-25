@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import "@/styles/post.css";
 import apiService from "@/utils/ApiService";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -65,7 +65,8 @@ const CommentItem = ({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const { authToken, isAuthenticated, user } = useAuth();
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
+    useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const handleUpVote = () => {
@@ -128,7 +129,7 @@ const CommentItem = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [])
+  }, []);
 
   return (
     <div
@@ -141,10 +142,10 @@ const CommentItem = ({
       )}
     >
       <ConfirmationModal
-          isOpen={isConfirmationModalOpen}
-          onClose={toggleConfirmationModal}
-          onConfirm={deleteComment}
-          isPost={false}
+        isOpen={isConfirmationModalOpen}
+        onClose={toggleConfirmationModal}
+        onConfirm={deleteComment}
+        isPost={false}
       />
       <li key={comment.id}>
         <div className="flex">
@@ -227,7 +228,10 @@ const CommentItem = ({
                     </button>
                   </>
                 ) : (
-                  <div ref={ref} className="flex justify-between items-center space-x-96">
+                  <div
+                    ref={ref}
+                    className="flex justify-between items-center space-x-96"
+                  >
                     <div className="flex  items-center space-x-96">
                       <button
                         className="cursor-pointer"
@@ -249,12 +253,14 @@ const CommentItem = ({
                       )}
                     </div>
                     {isMoreMenuOpen && (
-                      <div className="absolute right-0 bg-white border rounded shadow-md  mr-0">
-                        <button className="block w-full text-left p-2 hover:bg-gray-100">
+                      <div className="absolute right-0 bg-white border rounded shadow-md mr-0 p-5">
+                        {/*
+                        <button className="block w-full text-left px-5 py-2 hover:bg-gray-100">
                           Edit
                         </button>
+                        */}
                         <button
-                          className="block w-full text-left p-2 text-red-500 hover:bg-gray-100"
+                          className="block w-full text-left px-5 py-2 text-red-500 hover:bg-gray-100"
                           onClick={toggleConfirmationModal}
                         >
                           Delete

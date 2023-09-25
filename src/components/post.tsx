@@ -7,7 +7,7 @@ import { Post } from "@/types/post";
 import Link from "next/link";
 import apiService from "@/utils/ApiService";
 import { useAuth } from "@/contexts/AuthProvider";
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import cn from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { BiMessage } from "react-icons/bi";
@@ -30,7 +30,8 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
   );
   const router = useRouter();
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
+    useState<boolean>(false);
 
   const toggleConfirmationModal = () => {
     setIsConfirmationModalOpen(!isConfirmationModalOpen);
@@ -38,7 +39,6 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
 
   const toggleMoreMenu = () => {
     setIsMoreMenuOpen(!isMoreMenuOpen);
-
   };
 
   // Update the current vote and score when the post refresh
@@ -96,7 +96,7 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [])
+  }, []);
   return (
     <>
       <ConfirmationModal
@@ -105,21 +105,24 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
         onConfirm={deletePost}
         isPost={true}
       />
-      <div  className="relative w-full">
+      <div className="relative w-full">
         {post?.user.id === user?.id && (
-            <div ref={ref}   className="absolute inline-block top-5 right-5 p-2 z-10">
+          <div
+            ref={ref}
+            className="absolute inline-block top-5 right-5 p-2 z-10"
+          >
             <button className=" z-10" onClick={toggleMoreMenu}>
               <FiMoreVertical className="text-2xl" />
             </button>
-            { isMoreMenuOpen && (
-              <div  className="absolute top-10 right-0 bg-white border rounded shadow-md  mr-0">
-                <button
-                    className="block w-full text-left p-2 hover:bg-gray-100"
-                >
+            {isMoreMenuOpen && (
+              <div className="absolute top-10 right-0 bg-white border rounded shadow-md mr-0">
+                {/*                
+                <button className="block w-full text-left px-5 py-2 hover:bg-gray-100">
                   Edit
                 </button>
+                */}
                 <button
-                  className="block w-full text-left p-2 text-red-500 hover:bg-gray-100"
+                  className="block w-full text-left px-5 py-2 text-red-500 hover:bg-gray-100"
                   onClick={toggleConfirmationModal}
                 >
                   Delete
@@ -141,8 +144,8 @@ const PostComponent = ({ post, compact = false, refreshData }: PostProps) => {
                 currentVote === 1
                   ? "text-primary"
                   : currentVote === -1
-                    ? "text-red-500"
-                    : ""
+                  ? "text-red-500"
+                  : ""
               }
             />
             <ButtonWithIcon
@@ -250,41 +253,43 @@ const Footer = (props: {
 
 const getStackColor = (stack: string) => {
   switch (stack) {
-    case 'C#':
-      return '#370090';
-    case 'C':
-      return 'rgb(171,187,206)';
-    case 'C++':
-      return '#044F88';
-    case 'CSS':
-      return '#2965f1 ';
-    case 'HTML':
-      return '#f06529';
-    case 'JavaScript':
-      return '#F7E018';
-    case 'Go':
+    case "C#":
+      return "#370090";
+    case "C":
+      return "rgb(171,187,206)";
+    case "C++":
+      return "#044F88";
+    case "CSS":
+      return "#2965f1 ";
+    case "HTML":
+      return "#f06529";
+    case "JavaScript":
+      return "#F7E018";
+    case "Go":
       return "#29BDB1";
-    case 'PHP':
-      return '#AEB2D5';
-    case 'Java':
-      return 'linear-gradient(98.3deg, rgb(0, 0, 0) 10.6%, rgb(255, 0, 0) 97.7%)';
-    case 'Python':
-      return '#3670A0';
-    case 'Ruby':
-      return '#BE1B0E';
-    case 'Swift':
-      return '#FC933A';
-    case 'TypeScript':
-      return '#007acc';
+    case "PHP":
+      return "#AEB2D5";
+    case "Java":
+      return "linear-gradient(98.3deg, rgb(0, 0, 0) 10.6%, rgb(255, 0, 0) 97.7%)";
+    case "Python":
+      return "#3670A0";
+    case "Ruby":
+      return "#BE1B0E";
+    case "Swift":
+      return "#FC933A";
+    case "TypeScript":
+      return "#007acc";
     default:
-      return 'radial-gradient(circle at 7.5% 24%, rgb(237, 161, 193) 0%, rgb(250, 178, 172) 25.5%, rgb(190, 228, 210) 62.3%, rgb(215, 248, 247) 93.8%)';
+      return "radial-gradient(circle at 7.5% 24%, rgb(237, 161, 193) 0%, rgb(250, 178, 172) 25.5%, rgb(190, 228, 210) 62.3%, rgb(215, 248, 247) 93.8%)";
   }
 };
 
-
 const StackTag = ({ stack }: { stack: string }) => {
   return (
-    <span style={{ background: getStackColor(stack) }} className=" text-white text-xs px-4 py-1 rounded-sm font-bold">
+    <span
+      style={{ background: getStackColor(stack) }}
+      className=" text-white text-xs px-4 py-1 rounded-sm font-bold"
+    >
       {stack}
     </span>
   );

@@ -1,5 +1,4 @@
 import React from "react";
-import Skeleton from "@/components/ui/skeleton";
 import ApiService from "@/utils/ApiService";
 import { notFound } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
@@ -29,7 +28,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
           </div>
         </div>
       </div>
-      <p className="mt-12 px-8 text-xl">Publications utilisateur</p>
+      <p className="mt-12 px-8 text-xl">Latest posts</p>
       <div className="flex w-full flex-col items-center pt-5">
         <ProfilePosts userId={user?.id} />
       </div>

@@ -63,7 +63,7 @@ const Notification = () => {
   };
 
   const handleNotificationsNumber = (array: NotificationResponse[]) => {
-    if (!array?.length || array?.length) return null;
+    if (!array?.length) return null;
     const filteredArray = array?.filter(
       (notification) => !notification.hasBeenRead,
     );
