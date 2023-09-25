@@ -21,7 +21,7 @@ const LevelProgressBar = (props: LevelProgressBarProps) => {
                     <div className="flex flex-col md:grid grid-cols-12 text-gray-50">
                         <div className="flex md:contents">
                             <div className="col-start-2 col-end-4 mr-10 md:mx-auto relative">
-                                {name !== 'Seedling' && (
+                                {emojiName !== ':fleur_de_lis:' && (
                                     <div
                                         style={{ backgroundColor: progressBarColor, top: '6rem' }}
                                         className="w-0.5 h-5/6 relative left-3.5"
