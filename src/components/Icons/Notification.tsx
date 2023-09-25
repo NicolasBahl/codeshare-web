@@ -28,6 +28,16 @@ const Notification = () => {
     setNotifications(res.data);
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      getUserNotifications();
+    }, 15000); // 15000 milliseconds = 15 seconds
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(intervalId);
+
+  }, []); // Empty array denotes that the effect runs on mount and cleanup on unmount
+
   const openNotification = () => {
     setIsOpen(!isOpen);
   };
