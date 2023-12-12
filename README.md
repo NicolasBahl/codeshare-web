@@ -1,34 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# T6 - Final Year Project : CodeShare
 
-## Getting Started
+<p>CodeShare is a web app for sharing code and getting instant AI-generated reviews and recommendations. </p>
+This was our final year project for [Epitech](https://www.epitech.eu/fr/). Promo 2025 Strasbourg.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Share your code; it will be automatically formatted in the language you're using.
+- Comment and interact with other users' posts.
+- Earn experience for your participation.
+- Receive responses from our in-house AI.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repo: `git clone git@github.com:adrimarn/codeshare-web.git`
+2. Navigate to the project directory: `cd codeshare-web`
+3. Install dependencies: `yarn install`
+4. Launch the app: `yarn dev`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Screenshots
+<p>
+<img src="https://github.com/adrimarn/codeshare-web/assets/74007878/0dbf6281-037b-4c55-b293-257dba920581" width=100 />
+</p>
 
-## Learn More
+## Contact
 
-To learn more about Next.js, take a look at the following resources:
+If you have any questions or comments about the project, you can contact us at the following email addresses:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Adrien Marion (adrien.marion@epitech.eu)
+- Nicolas Bahl (nicolas.bahl@epitech.eu)
